@@ -39,7 +39,6 @@ let playerElement = document.getElementById("player") as HTMLDivElement;
 let config = CreateConfig(signallingServerAddress, playerElement);
 config.enableSpsAutoConnect = false;
 config.enableSpsAutoplay = false;
-config.afkTimeout = 0;
 
 // Create a Native DOM delegate instance that implements the Delegate interface class
 let delegate = new NativeDOMDelegate(config);
