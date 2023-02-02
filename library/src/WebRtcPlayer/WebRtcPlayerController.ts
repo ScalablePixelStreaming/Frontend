@@ -135,7 +135,7 @@ export class webRtcPlayerController implements IWebRtcPlayerController {
 		if (!this.webSocketController.webSocket) {
 			Logger.Log(Logger.GetStackTrace(), "A websocket connection has not been made yet so we will start the stream");
 			this.delegate.onWebRtcAutoConnect();
-			this.connectToSignallingSever();
+			this.connectToSignallingServer();
 
 		} else {
 			// set the replay status so we get a text overlay over an action overlay
@@ -150,7 +150,7 @@ export class webRtcPlayerController implements IWebRtcPlayerController {
 			// wait for the connection to close and restart the connection
 			let autoConnectTimeout = setTimeout(() => {
 				this.delegate.onWebRtcAutoConnect();
-				this.connectToSignallingSever();
+				this.connectToSignallingServer();
 				clearTimeout(autoConnectTimeout);
 			}, 3000);
 		}
@@ -260,7 +260,7 @@ export class webRtcPlayerController implements IWebRtcPlayerController {
 	/**
 	 * Connect to the Signaling server
 	 */
-	connectToSignallingSever() {
+	connectToSignallingServer() {
 		this.webSocketController.connect();
 	}
 
@@ -323,7 +323,7 @@ export class webRtcPlayerController implements IWebRtcPlayerController {
 
 		// if iceServers is empty return false this should not be the general use case but is here incase
 		if (!options.iceServers) {
-			Logger.Info(Logger.GetStackTrace(), 'A turn sever was not found');
+			Logger.Info(Logger.GetStackTrace(), 'A turn server was not found');
 			return false;
 		}
 
@@ -331,13 +331,13 @@ export class webRtcPlayerController implements IWebRtcPlayerController {
 		for (const iceServer of options.iceServers) {
 			for (const url of iceServer.urls) {
 				if (url.includes('turn')) {
-					Logger.Log(Logger.GetStackTrace(), `A turn sever was found at ${url}`);
+					Logger.Log(Logger.GetStackTrace(), `A turn server was found at ${url}`);
 					return true;
 				}
 			}
 		}
 
-		Logger.Info(Logger.GetStackTrace(), 'A turn sever was not found');
+		Logger.Info(Logger.GetStackTrace(), 'A turn server was not found');
 		return false;
 	}
 

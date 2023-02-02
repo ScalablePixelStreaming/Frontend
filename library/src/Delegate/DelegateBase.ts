@@ -159,11 +159,11 @@ export class DelegateBase implements IDelegate {
 
 		this.disconnectOverlay.onAction(() => {
 			this.onWebRtcAutoConnect();
-			this.iWebRtcController.connectToSignallingSever();
+			this.iWebRtcController.connectToSignallingServer();
 		});
 
 		// Build the webRtc connect overlay Event Listener and show the connect overlay
-		this.connectOverlay.onAction(() => this.iWebRtcController.connectToSignallingSever());
+		this.connectOverlay.onAction(() => this.iWebRtcController.connectToSignallingServer());
 
 		// set up the afk overlays action 
 		this.afkOverlay.onAction(() => this.iWebRtcController.onAfkClick());
@@ -188,7 +188,7 @@ export class DelegateBase implements IDelegate {
 		} else {
 			// if autoplaying show an info overlay while while waiting for the connection to begin 
 			this.onWebRtcAutoConnect();
-			this.iWebRtcController.connectToSignallingSever();
+			this.iWebRtcController.connectToSignallingServer();
 		}
 	}
 
