@@ -18,7 +18,7 @@ export class SPSApplication extends libfrontend.Application {
 		this.signallingExtension.onAuthenticationResponse = this.handleSignallingResponse.bind(this);
 		this.signallingExtension.onInstanceStateChanged = this.handleSignallingResponse.bind(this);
 
-		//this.enforceSpecialSignallingServerUrl();
+		this.enforceSpecialSignallingServerUrl();
 
 		// Add 'Send Stats to Server' checkbox
 		const spsSettingsSection = this.config.buildSectionWithHeading(this.settingsPanel.settingsContentElement, "Scalable Pixel Streaming");
