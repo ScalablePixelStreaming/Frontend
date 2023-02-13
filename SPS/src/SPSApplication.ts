@@ -5,8 +5,8 @@ import { MessageStats } from './Messages';
 
 
 export class SPSApplication extends libfrontend.Application {
-	private loadingOverlay : LoadingOverlay;
-	private signallingExtension : SPSSignalling;
+	private loadingOverlay: LoadingOverlay;
+	private signallingExtension: SPSSignalling;
 
 	static Flags = class {
 		static sendToServer = "sendStatsToServer"
@@ -42,26 +42,39 @@ export class SPSApplication extends libfrontend.Application {
 	}
 
 	handleSignallingResponse(signallingResp: string, isError: boolean) {
-		if(isError) { 
+		if (isError) {
 			this.showErrorOverlay(signallingResp);
-		} else { 
+		} else {
 			this.showLoadingOverlay(signallingResp);
 		}
 	}
 
 	enforceSpecialSignallingServerUrl() {
 		// SPS needs a special /ws added to the signalling server url so K8s can distinguish it
-		this.webRtcController.buildSignallingServerUrl = function() {
-			let signallingUrl = this.config.getTextSettingValue(libfrontend.TextParameters.SignallingServerUrl);
+		this.webRtcController.buildSignallingServerUrl = function () {
+			// let signallingUrl = this.config.getTextSettingValue(libfrontend.TextParameters.SignallingServerUrl);
 
-			console.log(signallingUrl)
+			// if(signallingUrl && signallingUrl !== undefined && !signallingUrl.endsWith("/ws")) {
+			// 	signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "ws" : signallingUrl + "/ws";
+			// }
 
-			if(signallingUrl && signallingUrl !== undefined && !signallingUrl.endsWith("/ws")) {
-				console.log("got in")
-				signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "ws" : signallingUrl + "/ws";
+			let signallingUrl = "";
+
+			let signallingServerProtocol = 'ws:';
+			if (location.protocol === 'https:') {
+				signallingServerProtocol = 'wss:';
 			}
 
-			console.log(signallingUrl)
+			// build the websocket endpoint based on the protocol used to load the frontend
+			signallingUrl = signallingServerProtocol + '//' + window.location.hostname
+
+			// if the frontend for an application is served from a base-level domain
+			// it has a trailing slash, so we need to account for this when appending the 'ws' for the websocket ingress
+			if (window.location.pathname == "/") {
+				signallingUrl += '/ws';
+			} else {
+				signallingUrl += (window.location.pathname + '/ws');
+			}
 
 			return signallingUrl
 		};
@@ -71,10 +84,10 @@ export class SPSApplication extends libfrontend.Application {
 		this.hideCurrentOverlay();
 		this.loadingOverlay.show();
 		this.loadingOverlay.update(signallingResp);
-		
+
 		// disable rain animation for now as perf is too poor on mobile devices
 		// this.loadingOverlay.animate();
-		
+
 		this.currentOverlay = this.loadingOverlay;
 	}
 
