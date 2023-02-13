@@ -54,9 +54,14 @@ export class SPSApplication extends libfrontend.Application {
 		this.webRtcController.buildSignallingServerUrl = function() {
 			let signallingUrl = this.config.getTextSettingValue(libfrontend.TextParameters.SignallingServerUrl);
 
+			console.log(signallingUrl)
+
 			if(signallingUrl && signallingUrl !== undefined && !signallingUrl.endsWith("/ws")) {
+				console.log("got in")
 				signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "ws" : signallingUrl + "/ws";
 			}
+
+			console.log(signallingUrl)
 
 			return signallingUrl
 		};
