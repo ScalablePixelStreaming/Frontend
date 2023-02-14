@@ -1,6 +1,6 @@
 {
   "name": "sps-application",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "The reference frontend implementation for Scalable Pixel Streaming consuming the new and improved Epic Pixel Streaming  library",
   "main": "index.ts",
   "scripts": {
