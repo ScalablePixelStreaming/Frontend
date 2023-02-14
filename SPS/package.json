@@ -1,13 +1,12 @@
 {
   "name": "sps-application",
-  "version": "0.1.0",
-  "description": "The reference implementation for consuming the Scalable Pixel Streaming frontend library",
+  "version": "0.2.1",
+  "description": "The reference frontend implementation for Scalable Pixel Streaming consuming the new and improved Epic Pixel Streaming  library",
   "main": "index.ts",
   "scripts": {
     "build": "npx webpack",
     "watch": "npx webpack --watch",
-    "serve": "webpack serve",
-    "build-all": "cd ../../library && npm run build-webpack && cd ../implementations/SPS && npm link ../../library && npm run build"
+    "serve": "webpack serve"
   },
   "author": "TensorWorks Pty Ltd",
   "license": "MIT",
