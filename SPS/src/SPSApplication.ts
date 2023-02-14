@@ -55,10 +55,8 @@ export class SPSApplication extends libfrontend.Application {
 			let signallingUrl = this.config.getTextSettingValue(libfrontend.TextParameters.SignallingServerUrl);
 
 			if(signallingUrl && signallingUrl !== undefined && !signallingUrl.endsWith("/ws")) {
-				signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "ws" : signallingUrl + "/ws";
+				signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "ws" : signallingUrl + window.location.pathname + "/ws";
 			}
-
-			console.log(window.location.hostname)
 
 			return signallingUrl
 		};
