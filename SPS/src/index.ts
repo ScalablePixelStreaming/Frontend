@@ -34,6 +34,8 @@ document.body.onload = function() {
 
 	// Extremely important, SPS only support browser sending the offer.
 	config.setFlagEnabled(libfrontend.Flags.BrowserSendOffer, true);
+	
+	console.log(window.location.hostname)
 	//config.setTextSetting(libfrontend.TextParameters.SignallingServerUrl, signallingServerAddress);
 
 	// Create a Native DOM delegate instance that implements the Delegate interface class

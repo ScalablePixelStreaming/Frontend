@@ -58,6 +58,8 @@ export class SPSApplication extends libfrontend.Application {
 				signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "ws" : signallingUrl + "/ws";
 			}
 
+			console.log(window.location.hostname)
+
 			return signallingUrl
 		};
 	}
