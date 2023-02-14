@@ -48,7 +48,7 @@ module.exports = (env) => {
           test: /\.(png|svg)$/i,
           type: 'asset/resource',
           generator: {
-            filename: '[name][ext]'
+            filename: 'images/[name][ext]'
           }
         },
       ],
