@@ -41,14 +41,14 @@ module.exports = (env) => {
           test: /\.css$/,
           type: 'asset/resource',
           generator: {
-            filename: 'css/[name][ext]'
+            filename: '[name][ext]'
           }
         },
         {
           test: /\.(png|svg)$/i,
           type: 'asset/resource',
           generator: {
-            filename: 'assets/images/[name][ext]'
+            filename: '[name][ext]'
           }
         },
       ],
@@ -72,9 +72,9 @@ module.exports = (env) => {
       minimize: false
     },
     devServer: {
-    	static: {
-    		directory: path.join(__dirname, 'dist'),
-    	},
+      static: {
+        directory: path.join(__dirname, 'dist'),
+      },
     }
   };
 }
