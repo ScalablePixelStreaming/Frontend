@@ -26,7 +26,7 @@ export class SPSApplication extends libfrontend.Application {
 			SPSApplication.Flags.sendToServer,
 			"Send stats to server",
 			"Send session stats to the server",
-			true
+			false
 		);
 
 		this.config.addSettingFlag(spsSettingsSection, sendStatsToServerSettings);
@@ -54,7 +54,7 @@ export class SPSApplication extends libfrontend.Application {
 		this.webRtcController.buildSignallingServerUrl = function () {
 			let signallingUrl = this.config.getTextSettingValue(libfrontend.TextParameters.SignallingServerUrl);
 
-			if(signallingUrl && signallingUrl !== undefined && !signallingUrl.endsWith("/ws")) {
+			if (signallingUrl && signallingUrl !== undefined && !signallingUrl.endsWith("/ws")) {
 				signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "ws" : signallingUrl + window.location.pathname + "/ws";
 			}
 
