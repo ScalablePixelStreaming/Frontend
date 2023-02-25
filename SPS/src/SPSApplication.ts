@@ -1,10 +1,11 @@
-import * as libfrontend from '@epicgames-ps/lib-pixelstreamingfrontend-dev'
+import { Application, SettingUIFlag, UIOptions } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.2';
+import { AggregatedStats, SettingFlag, TextParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.2';
 import { LoadingOverlay } from './LoadingOverlay';
 import { SPSSignalling } from './SignallingExtension';
 import { MessageStats } from './Messages';
 
 
-export class SPSApplication extends libfrontend.Application {
+export class SPSApplication extends Application {
 	private loadingOverlay: LoadingOverlay;
 	private signallingExtension: SPSSignalling;
 
@@ -12,33 +13,35 @@ export class SPSApplication extends libfrontend.Application {
 		static sendToServer = "sendStatsToServer"
 	}
 
-	constructor(config: libfrontend.Config) {
+	constructor(config: UIOptions) {
 		super(config);
-		this.signallingExtension = new SPSSignalling(this.webRtcController.webSocketController);
+		this.signallingExtension = new SPSSignalling(this.stream.webSocketController);
 		this.signallingExtension.onAuthenticationResponse = this.handleSignallingResponse.bind(this);
 		this.signallingExtension.onInstanceStateChanged = this.handleSignallingResponse.bind(this);
 
 		this.enforceSpecialSignallingServerUrl();
 
 		// Add 'Send Stats to Server' checkbox
-		const spsSettingsSection = this.config.buildSectionWithHeading(this.settingsPanel.settingsContentElement, "Scalable Pixel Streaming");
-		const sendStatsToServerSettings = new libfrontend.SettingFlag(
+		const spsSettingsSection = this.configUI.buildSectionWithHeading(this.settingsPanel.settingsContentElement, "Scalable Pixel Streaming");
+		const sendStatsToServerSetting = new SettingFlag(
 			SPSApplication.Flags.sendToServer,
 			"Send stats to server",
 			"Send session stats to the server",
-			false
+			false,
+			this.stream.config.useUrlParams
 		);
 
-		this.config.addSettingFlag(spsSettingsSection, sendStatsToServerSettings);
-		this.loadingOverlay = new LoadingOverlay(this.videoElementParent);
-	}
+		spsSettingsSection.appendChild(new SettingUIFlag(sendStatsToServerSetting).rootElement);
+		this.loadingOverlay = new LoadingOverlay(this.stream.videoElementParent);
 
-	onVideoStats(videoStats: libfrontend.AggregatedStats): void {
-		super.onVideoStats(videoStats);
-
-		if (this.config.isFlagEnabled(SPSApplication.Flags.sendToServer)) {
-			this.sendStatsToSignallingServer(videoStats);
-		}
+		this.stream.addEventListener(
+			'statsReceived',
+			({ data: { aggregatedStats } }) => {
+				if (sendStatsToServerSetting.flag) {
+					this.sendStatsToSignallingServer(aggregatedStats);
+				}
+			}
+		);
 	}
 
 	handleSignallingResponse(signallingResp: string, isError: boolean) {
@@ -51,8 +54,8 @@ export class SPSApplication extends libfrontend.Application {
 
 	enforceSpecialSignallingServerUrl() {
 		// SPS needs a special /ws added to the signalling server url so K8s can distinguish it
-		this.webRtcController.buildSignallingServerUrl = function () {
-			let signallingUrl = this.config.getTextSettingValue(libfrontend.TextParameters.SignallingServerUrl);
+		this.stream.webRtcController.buildSignallingServerUrl = function () {
+			let signallingUrl = this.config.getTextSettingValue(TextParameters.SignallingServerUrl);
 
 			if (signallingUrl && signallingUrl !== undefined && !signallingUrl.endsWith("/ws")) {
 				signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "ws" : signallingUrl + window.location.pathname + "/ws";
@@ -77,8 +80,8 @@ export class SPSApplication extends libfrontend.Application {
 	 * Send Aggregated Stats to the Signaling Server
 	 * @param stats - Aggregated Stats
 	 */
-	sendStatsToSignallingServer(stats: libfrontend.AggregatedStats) {
+	sendStatsToSignallingServer(stats: AggregatedStats) {
 		const data = new MessageStats(stats);
-		this.webRtcController.webSocketController.webSocket.send(data.payload());
+		this.stream.webSocketController.webSocket.send(data.payload());
 	}
 }

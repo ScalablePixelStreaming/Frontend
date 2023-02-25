@@ -1,4 +1,13 @@
-import * as libfrontend from "@epicgames-ps/lib-pixelstreamingfrontend-dev";
+import {
+	AggregatedStats,
+	CandidatePairStats,
+	CandidateStat,
+	DataChannelStats,
+	InboundAudioStats,
+	InboundVideoStats,
+	MessageSend,
+	OutBoundVideoStats
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.2';
 
 export enum MessageSendTypes {
 	STATS = "stats",
@@ -7,19 +16,19 @@ export enum MessageSendTypes {
 /**
  * Aggregated Stats Message Wrapper
  */
-export class MessageStats extends libfrontend.MessageSend {
-	inboundVideoStats: libfrontend.InboundVideoStats;
-	inboundAudioStats: libfrontend.InboundAudioStats;
-	candidatePair: libfrontend.CandidatePairStats
-	dataChannelStats: libfrontend.DataChannelStats;
-	localCandidates: Array<libfrontend.CandidateStat>;
-	remoteCandidates: Array<libfrontend.CandidateStat>;
-	outboundVideoStats: libfrontend.OutBoundVideoStats;
+export class MessageStats extends MessageSend {
+	inboundVideoStats: InboundVideoStats;
+	inboundAudioStats: InboundAudioStats;
+	candidatePair: CandidatePairStats
+	dataChannelStats: DataChannelStats;
+	localCandidates: Array<CandidateStat>;
+	remoteCandidates: Array<CandidateStat>;
+	outboundVideoStats: OutBoundVideoStats;
 
 	/**
 	 * @param aggregatedStats - Aggregated Stats 
 	 */
-	constructor(aggregatedStats: libfrontend.AggregatedStats) {
+	constructor(aggregatedStats: AggregatedStats) {
 		super();
 		this.type = MessageSendTypes.STATS
 		this.inboundVideoStats = aggregatedStats.inboundVideoStats;

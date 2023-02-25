@@ -1,6 +1,6 @@
-import * as libfrontend from "@epicgames-ps/lib-pixelstreamingfrontend-dev";
+import { TextOverlay } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.2';
 
-export class LoadingOverlay extends libfrontend.TextOverlay {
+export class LoadingOverlay extends TextOverlay {
 	maxDrops = 50;
 	maxSize = 5;
 	maxDuration = 5;
@@ -36,7 +36,7 @@ export class LoadingOverlay extends libfrontend.TextOverlay {
 
 
 	public static spinner(): HTMLElement {
-		if(!LoadingOverlay._spinner) {
+		if (!LoadingOverlay._spinner) {
 			// build the spinner div
 			const size = LoadingOverlay._rootElement.clientWidth * 0.03;
 			LoadingOverlay._spinner = document.createElement('div');
@@ -68,12 +68,12 @@ export class LoadingOverlay extends libfrontend.TextOverlay {
 
 	public animate() {
 		// Update the existing drops to have an increased speed
-		for(let raindrop of this.rainDrops) {
+		for (let raindrop of this.rainDrops) {
 			raindrop.element.setAttribute("style", "animation-duration:" + (1 + Math.random() * this.maxDuration) + "s;")
 		}
 
 		let i = 0;
-		while(i < this.maxDrops) {
+		while (i < this.maxDrops) {
 			const dropContainer = document.createElement("div");
 			dropContainer.id = "dropContainer";
 
@@ -84,7 +84,7 @@ export class LoadingOverlay extends libfrontend.TextOverlay {
 			raindrop.offsetLeft = Math.floor(Math.random() * LoadingOverlay.rootElement().clientWidth);
 			raindrop.element = dropContainer;
 
-			
+
 
 			const drop = document.createElement("drop");
 			drop.setAttribute("style", "left: " + raindrop.offsetLeft + "px; width:" + raindrop.size + "px; overflow: visible;");

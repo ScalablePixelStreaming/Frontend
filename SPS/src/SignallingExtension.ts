@@ -1,73 +1,75 @@
-
-import { MessageSend, WebSocketController } from "@epicgames-ps/lib-pixelstreamingfrontend-dev";
-import { MessageRecv } from "@epicgames-ps/lib-pixelstreamingfrontend-dev";
-import { Logger } from "@epicgames-ps/lib-pixelstreamingfrontend-dev";
+import {
+	Logger,
+	MessageRecv,
+	MessageSend,
+	WebSocketController,
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.2';
 
 /**
  * Auth Request Message Wrapper
  */
- export class MessageAuthRequest extends MessageSend {
-    token: string;
-    provider: string;
+export class MessageAuthRequest extends MessageSend {
+	token: string;
+	provider: string;
 
-    /**
-     * @param token - Token Provided by the Auth Provider
-     * @param provider - Name of the provider that is registered in the auth plugin
-     */
-    constructor(token: string, provider: string) {
-        super();
-        this.type = "authenticationRequest";
-        this.token = token;
-        this.provider = provider;
-    }
+	/**
+	 * @param token - Token Provided by the Auth Provider
+	 * @param provider - Name of the provider that is registered in the auth plugin
+	 */
+	constructor(token: string, provider: string) {
+		super();
+		this.type = "authenticationRequest";
+		this.token = token;
+		this.provider = provider;
+	}
 }
 
 /**
  * States of the UE Instance
  */
- export enum InstanceState {
-    UNALLOCATED = "UNALLOCATED",
-    PENDING = "PENDING",
-    FAILED = "FAILED",
-    READY = "READY"
+export enum InstanceState {
+	UNALLOCATED = "UNALLOCATED",
+	PENDING = "PENDING",
+	FAILED = "FAILED",
+	READY = "READY"
 }
 
 /**
  * Instance State Message wrapper
  */
- export class MessageInstanceState extends MessageRecv {
-    state: InstanceState;
-    details: string;
-    progress: number;
+export class MessageInstanceState extends MessageRecv {
+	state: InstanceState;
+	details: string;
+	progress: number;
 }
 
 /**
  * Types of Authentication reposes 
  */
- export enum MessageAuthResponseOutcomeType {
-    REDIRECT = "REDIRECT",
-    INVALID_TOKEN = "INVALID_TOKEN",
-    AUTHENTICATED = "AUTHENTICATED",
-    ERROR = "ERROR"
+export enum MessageAuthResponseOutcomeType {
+	REDIRECT = "REDIRECT",
+	INVALID_TOKEN = "INVALID_TOKEN",
+	AUTHENTICATED = "AUTHENTICATED",
+	ERROR = "ERROR"
 }
 
 /**
  * Authentication Response Message wrapper
  */
- export class MessageAuthResponse extends MessageRecv {
-    outcome: MessageAuthResponseOutcomeType;
-    redirect: string;
-    error: string;
+export class MessageAuthResponse extends MessageRecv {
+	outcome: MessageAuthResponseOutcomeType;
+	redirect: string;
+	error: string;
 }
 
 /**
  * Instance Request Message Wrapper
  */
- export class MessageRequestInstance extends MessageSend {
-    constructor() {
-        super();
-        this.type = "requestInstance";
-    }
+export class MessageRequestInstance extends MessageSend {
+	constructor() {
+		super();
+		this.type = "requestInstance";
+	}
 }
 
 /**
@@ -76,10 +78,10 @@ import { Logger } from "@epicgames-ps/lib-pixelstreamingfrontend-dev";
  */
 export class SPSSignalling {
 
-	onInstanceStateChanged : (stateChangedMsg : string, isError: boolean) => void;
-	onAuthenticationResponse : (authRespMsg : string, isError : boolean) => void;
+	onInstanceStateChanged: (stateChangedMsg: string, isError: boolean) => void;
+	onAuthenticationResponse: (authRespMsg: string, isError: boolean) => void;
 
-	constructor(websocketController: WebSocketController){
+	constructor(websocketController: WebSocketController) {
 		this.extendSignallingProtocol(websocketController);
 	}
 
@@ -89,7 +91,7 @@ export class SPSSignalling {
 	extendSignallingProtocol(webSocketController: WebSocketController) {
 
 		// authenticationRequired
-		webSocketController.signallingProtocol.addMessageHandler("authenticationRequired", (authReqPayload : string) => {
+		webSocketController.signallingProtocol.addMessageHandler("authenticationRequired", (authReqPayload: string) => {
 			Logger.Log(Logger.GetStackTrace(), "AUTHENTICATION_REQUIRED", 6);
 			const url_string = window.location.href;
 			const url = new URL(url_string);
@@ -98,14 +100,14 @@ export class SPSSignalling {
 		});
 
 		// instanceState
-		webSocketController.signallingProtocol.addMessageHandler("instanceState", (instanceStatePayload : string) => {
+		webSocketController.signallingProtocol.addMessageHandler("instanceState", (instanceStatePayload: string) => {
 			Logger.Log(Logger.GetStackTrace(), "INSTANCE_STATE", 6);
 			const instanceState: MessageInstanceState = JSON.parse(instanceStatePayload);
 			this.handleInstanceStateChanged(instanceState);
 		});
 
 		// authenticationResponse
-		webSocketController.signallingProtocol.addMessageHandler("authenticationResponse", (authRespPayload : string) => {
+		webSocketController.signallingProtocol.addMessageHandler("authenticationResponse", (authRespPayload: string) => {
 			Logger.Log(Logger.GetStackTrace(), "AUTHENTICATION_RESPONSE", 6);
 
 			const authenticationResponse: MessageAuthResponse = JSON.parse(authRespPayload);
