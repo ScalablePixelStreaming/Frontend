@@ -54,15 +54,15 @@ export class SPSApplication extends Application {
 
 	enforceSpecialSignallingServerUrl() {
 		// SPS needs a special /ws added to the signalling server url so K8s can distinguish it
-		this.stream.webRtcController.buildSignallingServerUrl = function () {
-			let signallingUrl = this.config.getTextSettingValue(TextParameters.SignallingServerUrl);
+		this.stream.setSignallingUrlBuilder(()=> {
+			let signallingUrl = this.stream.config.getTextSettingValue(TextParameters.SignallingServerUrl);
 
 			if (signallingUrl && signallingUrl !== undefined && !signallingUrl.endsWith("/ws")) {
 				signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "ws" : signallingUrl + window.location.pathname + "/ws";
 			}
 
 			return signallingUrl
-		};
+		});
 	}
 
 	showLoadingOverlay(signallingResp: string) {
