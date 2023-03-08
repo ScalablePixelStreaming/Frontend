@@ -11,6 +11,8 @@ The SPS frontend is a lightweight implementation of Epic Games' [Pixel Streaming
 
 ## Documentation
 
+In general, the official Epic Games Pixel Streaming [frontend docs](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/master/Frontend) should cover most common usage cases (as our library is simply a thin wrapper on that). However, some SPS frontend specific docs are listed below:
+
 - [Migrating from SPS frontend <=0.1.4](./SPS/docs/api_transition_guide.md)
 
 ## Issues
