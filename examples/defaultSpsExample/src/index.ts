@@ -1,6 +1,4 @@
-import { SPSApplication } from "./SPSApplication";
-import { Config, PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.2';
-import { PixelStreamingApplicationStyle } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.2';
+import { SPSApplication, Config, PixelStreaming, PixelStreamingApplicationStyle } from "@tensorworks/spsfrontend";
 
 // Apply default styling from Epic's frontend
 export const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
