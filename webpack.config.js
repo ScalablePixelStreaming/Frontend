@@ -15,12 +15,6 @@ module.exports = (env) => {
         WEBSOCKET_URL: JSON.stringify((env.WEBSOCKET_URL !== undefined) ? env.WEBSOCKET_URL : '')
       }),
 
-      new HtmlWebpackPlugin({
-        title: 'Development',
-        template: './src/index.html',
-        filename: 'index.html'
-      }),
-
     ],
     // turn off so we can see the source map for dom delegate so we can debug the library
     devtool: 'inline-source-map',
