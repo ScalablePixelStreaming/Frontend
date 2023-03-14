@@ -1,18 +1,21 @@
-import * as spsFrontend from "@tensorworks/spsfrontend";
+import { SPSApplication, Config, PixelStreaming, PixelStreamingApplicationStyle } from "@tensorworks/spsfrontend";
 
 // Apply default styling from Epic's frontend
-export const PixelStreamingApplicationStyles = new spsFrontend.PixelStreamingApplicationStyle();
+export const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
 PixelStreamingApplicationStyles.applyStyleSheet();
 
 document.body.onload = function () {
 
+	// Example of how to set the logger level
+	//libfrontend.Logger.SetLoggerVerbosity(10);
+
 	// Create a config object.
 	// Note: This config is extremely important, SPS only supports the browser sending the offer.
-	const config = new spsFrontend.Config({ useUrlParams: true, initialSettings: { OfferToReceive: true, TimeoutIfIdle: true } });
+	const config = new Config({ useUrlParams: true, initialSettings: { OfferToReceive: true, TimeoutIfIdle: true } });
 
 	// Create a Native DOM delegate instance that implements the Delegate interface class
-	const stream = new spsFrontend.PixelStreaming(config);
-	const spsApplication = new spsFrontend.SPSApplication({ 
+	const stream = new PixelStreaming(config);
+	const spsApplication = new SPSApplication({ 
 		stream,
 		onColorModeChanged: (isLightMode) => PixelStreamingApplicationStyles.setColorMode(isLightMode) /* Light/Dark mode support. */
 	});
