@@ -10,6 +10,11 @@ module.exports = (env) => {
       index: './src/index.ts',
     },
     plugins: [
+
+      new webpack.DefinePlugin({
+        WEBSOCKET_URL: JSON.stringify((env.WEBSOCKET_URL !== undefined) ? env.WEBSOCKET_URL : '')
+      }),
+
     ],
     // turn off so we can see the source map for dom delegate so we can debug the library
     devtool: 'inline-source-map',
@@ -22,6 +27,24 @@ module.exports = (env) => {
             /node_modules/,
           ],
         },
+        {
+          test: /\.html$/i,
+          use: 'html-loader'
+        },
+        {
+          test: /\.css$/,
+          type: 'asset/resource',
+          generator: {
+            filename: '[name][ext]'
+          }
+        },
+        {
+          test: /\.(png|svg)$/i,
+          type: 'asset/resource',
+          generator: {
+            filename: 'images/[name][ext]'
+          }
+        },
       ],
     },
     resolve: {
@@ -29,7 +52,7 @@ module.exports = (env) => {
     },
     output: {
       filename: '[name].js',
-      library: 'spsfrontend',
+      library: 'frontend', // change this to something more meaningful
       libraryTarget: 'umd',
       path: path.resolve(__dirname, 'dist'),
       clean: true,
