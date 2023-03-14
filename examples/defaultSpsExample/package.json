@@ -6,16 +6,12 @@
   "scripts": {
     "build": "npx webpack",
     "watch": "npx webpack --watch",
-    "start": "npx webpack && open-cli ./dist/index.html",
-    "serve": "webpack serve",
-    "symlink": "cd ../../ && npm link && cd ../examples/defaultSpsExample && npm link @tensorworks/spsfrontend",
-    "build-all": "cd ../../ && npm run build && cd ../examples/defaultSpsExample && npm run symlink && npm run build"
+    "serve": "webpack serve"
   },
   "author": "TensorWorks Pty Ltd",
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
-    "@tensorworks/spsfrontend": "^0.2.5",
     "@types/node": "^18.15.1",
     "@types/webpack": "^5.28.0",
     "@webpack-cli/generators": "^3.0.1",
