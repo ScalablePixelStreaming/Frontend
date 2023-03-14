@@ -2,7 +2,7 @@
   "name": "@tensorworks/spsfrontend",
   "version": "1.0.0",
   "description": "The reference frontend implementation for Scalable Pixel Streaming consuming Epic Pixel Streaming Frontend",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "build": "npx webpack",
     "watch": "npx webpack --watch",
