@@ -1,5 +1,5 @@
 {
-  "name": "defaultspsexample",
+  "name": "spsexample",
   "version": "1.0.0",
   "description": "The default example for consuming the Scalable Pixel Streaming Frontend",
   "main": "index.ts",
@@ -8,8 +8,8 @@
     "watch": "npx webpack --watch",
     "start": "npx webpack && open-cli ./dist/index.html",
     "serve": "webpack serve",
-    "symlink": "cd ../../ && npm link && cd ../examples/defaultSpsExample && npm link @tensorworks/spsfrontend",
-    "build-all": "cd ../../ && npm run build && cd ../examples/defaultSpsExample && npm run symlink && npm run build"
+    "symlink": "cd ../ && npm link && cd ./spsExample && npm link @tensorworks/spsfrontend",
+    "build-all": "cd ../ && npm install && npm run build && cd ./spsExample && npm install && npm run symlink && npm run build"
   },
   "author": "TensorWorks Pty Ltd",
   "keywords": [],
