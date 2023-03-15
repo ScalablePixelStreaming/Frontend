@@ -16,7 +16,7 @@ Below is a comprehensive guide to accessing the Scalable Pixel Streaming Fronten
 - [Scalable Pixel Streaming Frontend utilisation guide](./docs/frontend_utilisation_guide.md)
 
 ### Migrating from Scalable Pixel Streaming Frontend
-In general, the official Epic Games Pixel Streaming [Frontend docs](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/master/Frontend) should cover most common usage cases (as our library is simply a thin wrapper on that). However, some SPS frontend specific docs are listed below:
+In general, the official Epic Games Pixel Streaming [Frontend docs](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/master/Frontend) should cover most common usage cases (as our library is simply a thin wrapper on that). However, some Scalable Pixel Streaming Frontend specific docs are listed below:
 
 - [Migrating from Scalable Pixel Streaming Frontend <=0.1.4](./docs/api_transition_guide.md)
 
