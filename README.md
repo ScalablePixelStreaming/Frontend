@@ -12,7 +12,7 @@ The SPS frontend is a lightweight implementation of Epic Games' [Pixel Streaming
 ## Documentation
 
 ### Utilising the Scalable Pixel Streaming Frontend
-Below is a comprehensive guide to accessing the Scalable Pixel Streaming Frontend, including where to download the library and how to consume and customise it for your own projects.
+Below is a comprehensive guide for accessing the Scalable Pixel Streaming Frontend. This guide includes where to download the library, how to consume it and how to customise it for usage in different projects.
 - [Scalable Pixel Streaming Frontend utilisation guide](./docs/frontend_utilisation_guide.md)
 
 ### Migrating from Scalable Pixel Streaming Frontend
