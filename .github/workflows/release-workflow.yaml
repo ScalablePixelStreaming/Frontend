@@ -1,14 +1,17 @@
-name: Publish library package to npmjs
-on:
-  push:
-    tags:
-      - "*"
+name: Scalable Pixel Streaming Frontend Release Workflow Pipeline
+
+# Start our pipeline when we create a new tag on the master branch
+on: 
+  release:
+    types: [published]
+    
 jobs:
-  build:
+  # Build NPM Package
+  build-npm:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./SPS
+        working-directory: ./library
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
