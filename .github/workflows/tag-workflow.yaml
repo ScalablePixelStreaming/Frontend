@@ -42,8 +42,8 @@ jobs:
     - name: Install zip
       uses: montudor/action-zip@v1
 
-      # Build the Docker images that are part of the core framework (non cloud platform specific images)
-    - name: Build core framework images and push to Docker
+      # Build the Scalable Pixel Streaming Frontend Docker image from the dist directories of the packages
+    - name: Build the Scalable Pixel Streaming Frontend Docker image for AWS and push to Docker
       run: |
         ./.scripts/linux/pipeline/build-images-core.sh --version $FRONTEND_VERSION --provider $CLOUD_PROVIDER
 
@@ -65,6 +65,6 @@ jobs:
     - name: Docker login
       run: docker login -u $DOCKER_USER -p $DOCKER_TOKEN
 
-      # Build the Docker images that are part of the core framework (non cloud platform specific images)
-    - name: Build core framework images and push to Docker
+      # Build the Scalable Pixel Streaming Frontend Docker image from the dist directories of the packages
+    - name: Build the Scalable Pixel Streaming Frontend Docker image for CoreWeave and push to Docker
       run: ./.scripts/linux/pipeline/build-images-core.sh --version $FRONTEND_VERSION --provider $CLOUD_PROVIDER
