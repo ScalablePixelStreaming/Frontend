@@ -1,0 +1,25 @@
+{
+  "name": "@tensorworks/lib-spsfrontend",
+  "version": "1.0.0",
+  "description": "The Scalable Pixel Streaming Frontend Library consuming Epic Games' Pixel Streaming Frontend",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "npx webpack",
+    "watch": "npx webpack --watch",
+    "serve": "webpack serve"
+  },
+  "author": "TensorWorks Pty Ltd",
+  "license": "MIT",
+  "devDependencies": {
+    "@epicgames-ps/lib-pixelstreamingfrontend-ue5.2": "^0.2.0",
+    "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.2": "^0.1.0",
+    "css-loader": "^6.7.3",
+    "html-loader": "^4.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "path": "^0.12.7",
+    "ts-loader": "^9.4.2",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  }
+}

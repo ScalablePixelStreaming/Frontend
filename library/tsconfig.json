@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "noImplicitAny": true,
+    "module": "es6",
+    "esModuleInterop": true,
+    "target": "ES6",
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "allowJs": true,
+    "declaration": false,
+    "typeRoots" : ["./node_modules/@types", "./typings"]
+  },
+  "lib": ["es2015"],
+  "include": ["./src/*.ts"],
+}
