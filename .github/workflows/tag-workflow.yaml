@@ -1,0 +1,82 @@
+name: Scalable Pixel Streaming Frontend Tag Workflow Pipeline
+
+# Start our pipeline when we create a new tag on the master branch
+on:
+  push:
+    tags:
+      - '*'
+    
+# Assign an environment variable that we can use throughout the workflow for the version
+# of SPS that we are tagging
+env:
+  FRONTEND_VERSION: ${{ github.ref_name }}
+  DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_TOKEN: ${{ secrets.DOCKER_ACCESS_KEY }}
+
+jobs:
+
+  # Build AWS
+  build-aws:
+
+    runs-on: ubuntu-latest
+
+    env:
+      CLOUD_PROVIDER: aws
+
+    steps:
+
+    - name: Free up some space
+      run: |
+        sudo rm -rf /usr/local/lib/android # will release about 10 GB if you don't need Android
+        sudo rm -rf /usr/share/dotnet # will release about 20GB if you don't need .NET
+    
+    # Clone the source code on the runner
+    - name: Clone repository
+      uses: actions/checkout@v3
+
+    # Setup GO
+    - name: Set up GO
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+
+      # Login to Docker
+    - name: Docker login
+      run: docker login -u $DOCKER_USER -p $DOCKER_TOKEN
+
+    # Install zip
+    - name: Install zip
+      uses: montudor/action-zip@v1
+
+      # Build the Docker images that are part of the core framework (non cloud platform specific images)
+    - name: Build core framework images and push to Docker
+      run: |
+        ./.scripts/linux/pipeline/build-images-core.sh --version $FRONTEND_VERSION --provider $CLOUD_PROVIDER
+
+  # Build CoreWeave
+  build-coreweave:
+
+    runs-on: ubuntu-latest
+
+    env:
+      CLOUD_PROVIDER: coreweave
+
+    steps: 
+
+    # Clone the source code on the runner
+    - name: Clone repository
+      uses: actions/checkout@v3
+
+    # Setup GO
+    - name: Set up GO
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+
+      # Login to Docker
+    - name: Docker login
+      run: docker login -u $DOCKER_USER -p $DOCKER_TOKEN
+
+      # Build the Docker images that are part of the core framework (non cloud platform specific images)
+    - name: Build core framework images and push to Docker
+      run: ./.scripts/linux/pipeline/build-images-core.sh --version $FRONTEND_VERSION --provider $CLOUD_PROVIDER
