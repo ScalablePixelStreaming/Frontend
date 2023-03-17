@@ -38,10 +38,6 @@ jobs:
     - name: Docker login
       run: docker login -u $DOCKER_USER -p $DOCKER_TOKEN
 
-    # Install zip
-    - name: Install zip
-      uses: montudor/action-zip@v1
-
       # Build the Scalable Pixel Streaming Frontend Docker image from the dist directories of the packages
     - name: Build the Scalable Pixel Streaming Frontend Docker image for AWS and push to Docker
       run: |
