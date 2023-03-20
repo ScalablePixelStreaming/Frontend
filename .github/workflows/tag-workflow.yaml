@@ -50,7 +50,7 @@ jobs:
         npm run build-all
 
       # Build the Scalable Pixel Streaming Frontend Docker image from the dist directories of the packages
-    - name: Build the Scalable Pixel Streaming Frontend Docker image for AWS and push to Docker
+    - name: Build the Scalable Pixel Streaming Frontend Docker image and push to Docker
       run: |
         docker build -t "tensorworks/sps-frontend:$VERSION-$CLOUD_PROVIDER" -f ./dockerfiles/sps-frontend.dockerfile .
         docker push "tensorworks/sps-frontend:$VERSION-$CLOUD_PROVIDER"
