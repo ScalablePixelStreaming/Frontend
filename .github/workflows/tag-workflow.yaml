@@ -16,7 +16,7 @@ env:
 jobs:
 
   # Build AWS
-  build-aws:
+  build-library:
 
     runs-on: ubuntu-latest
 
@@ -38,29 +38,19 @@ jobs:
     - name: Docker login
       run: docker login -u $DOCKER_USER -p $DOCKER_TOKEN
 
+      # Set up Node js for npm
+    - name: Setup Nodejs
+      uses: actions/setup-node@v3
+     
+      # Build the SPS Frontend 
+    - name: Build SPS Frontend
+      run: |
+        cd /Frontend/examples/typescript
+        npm install
+        npm run build-all
+
       # Build the Scalable Pixel Streaming Frontend Docker image from the dist directories of the packages
     - name: Build the Scalable Pixel Streaming Frontend Docker image for AWS and push to Docker
       run: |
-        ./.scripts/linux/pipeline/build-images-core.sh --version $FRONTEND_VERSION --provider $CLOUD_PROVIDER
-
-  # Build CoreWeave
-  build-coreweave:
-
-    runs-on: ubuntu-latest
-
-    env:
-      CLOUD_PROVIDER: coreweave
-
-    steps: 
-
-    # Clone the source code on the runner
-    - name: Clone repository
-      uses: actions/checkout@v3
-
-      # Login to Docker
-    - name: Docker login
-      run: docker login -u $DOCKER_USER -p $DOCKER_TOKEN
-
-      # Build the Scalable Pixel Streaming Frontend Docker image from the dist directories of the packages
-    - name: Build the Scalable Pixel Streaming Frontend Docker image for CoreWeave and push to Docker
-      run: ./.scripts/linux/pipeline/build-images-core.sh --version $FRONTEND_VERSION --provider $CLOUD_PROVIDER
+        docker build -t "tensorworks/sps-frontend:$VERSION-$CLOUD_PROVIDER" -f ./dockerfiles/sps-frontend.dockerfile .
+        docker push "tensorworks/sps-frontend:$VERSION-$CLOUD_PROVIDER"
