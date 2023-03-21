@@ -9,7 +9,7 @@ on:
 # Assign an environment variable that we can use throughout the workflow for the version
 # of SPS that we are tagging
 env:
-  FRONTEND_VERSION: ${{ github.ref_name }}
+  VERSION: ${{ github.ref_name }}
   DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
   DOCKER_TOKEN: ${{ secrets.DOCKER_ACCESS_KEY }}
 
@@ -19,9 +19,6 @@ jobs:
   build-library:
 
     runs-on: ubuntu-latest
-
-    env:
-      CLOUD_PROVIDER: aws
 
     steps:
 
@@ -45,12 +42,11 @@ jobs:
       # Build the SPS Frontend 
     - name: Build SPS Frontend
       run: |
-        cd /Frontend/examples/typescript
         npm install
         npm run build-all
 
       # Build the Scalable Pixel Streaming Frontend Docker image from the dist directories of the packages
     - name: Build the Scalable Pixel Streaming Frontend Docker image and push to Docker
       run: |
-        docker build -t "tensorworks/sps-frontend:$VERSION-$CLOUD_PROVIDER" -f ./dockerfiles/sps-frontend.dockerfile .
-        docker push "tensorworks/sps-frontend:$VERSION-$CLOUD_PROVIDER"
+        docker build -t "tensorworks/sps-frontend:$VERSION" -f ./dockerfiles/sps-frontend.dockerfile .
+        docker push "tensorworks/sps-frontend:$VERSION"
