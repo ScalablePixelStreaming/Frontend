@@ -8,8 +8,7 @@
     "watch": "npx webpack --watch",
     "start": "npx webpack && open-cli ./dist/index.html",
     "serve": "webpack serve",
-    "symlink": "cd ../../library && npm link && cd ../examples/spsFrontend && npm link @tensorworks/lib-spsfrontend",
-    "build-all": "cd ../../library && npm install && npm run build && cd ../examples/spsFrontend && npm install && npm run symlink && npm run build"
+    "build-all": "cd ../../library && npm install && npm run build && cd ../examples/typescript && npm install && npm link ../../library && npm run build"
   },
   "author": "TensorWorks Pty Ltd",
   "keywords": [],
