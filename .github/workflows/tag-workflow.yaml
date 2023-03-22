@@ -6,8 +6,7 @@ on:
     tags:
       - '*'
     
-# Assign an environment variable that we can use throughout the workflow for the version
-# of SPS that we are tagging
+# Assign an environment variable that we can use for the version of the Scalable Pixel Streaming Frontend that we are tagging
 env:
   VERSION: ${{ github.ref_name }}
   DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
@@ -21,13 +20,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
+      
+      # remove unneeded pieces from runner to free up space
     - name: Free up some space
       run: |
         sudo rm -rf /usr/local/lib/android # will release about 10 GB if you don't need Android
         sudo rm -rf /usr/share/dotnet # will release about 20GB if you don't need .NET
     
-    # Clone the source code on the runner
+      # Clone the source code on the runner
     - name: Clone repository
       uses: actions/checkout@v3
 
@@ -39,10 +39,10 @@ jobs:
     - name: Setup Nodejs
       uses: actions/setup-node@v3
      
-      # Build the SPS Frontend 
+      # Build the Scalable Pixel Streaming Frontend Library and Example 
     - name: Build SPS Frontend
       run: |
-        npm install
+        cd ./examples/typescript      
         npm run build-all
 
       # Build the Scalable Pixel Streaming Frontend Docker image from the dist directories of the packages
