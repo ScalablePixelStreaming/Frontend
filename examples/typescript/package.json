@@ -1,0 +1,34 @@
+{
+  "name": "spstypescriptexample",
+  "version": "1.0.0",
+  "description": "The typescript example for consuming the Scalable Pixel Streaming Frontend",
+  "main": "index.ts",
+  "scripts": {
+    "build": "npx webpack",
+    "watch": "npx webpack --watch",
+    "start": "npx webpack && open-cli ./dist/index.html",
+    "serve": "webpack serve",
+    "build-all": "cd ../../library && npm install && npm run build && cd ../examples/typescript && npm install && npm link ../../library && npm run build"
+  },
+  "author": "TensorWorks Pty Ltd",
+  "keywords": [],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.15.1",
+    "@types/webpack": "^5.28.0",
+    "@webpack-cli/generators": "^3.0.1",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "declaration-bundler-webpack-plugin": "^1.0.3",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.4.2",
+    "html-loader": "^4.2.0",
+    "typescript": "^4.9.5",
+    "webpack": "^5.76.1",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1",
+    "wepack-cli": "^0.0.1-security"
+  }
+}
