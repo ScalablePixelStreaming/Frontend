@@ -7,7 +7,7 @@ on: pull_request
 jobs:
 
   # This job will checkout the repo, install dependencies and then build the frontend package
-  test-build-frontend:
+  test-build-frontend-and-lib:
     runs-on: ubuntu-latest
 
     # set out working directory
@@ -26,8 +26,10 @@ jobs:
         with:
           node-version: "16.x"
 
-      - name: Install dependencies and build
+      # install deps for frontend and library and build both
+      - name: Install library and frontend deps and build
+        working-directory: ./examples/typescript
         id: npm
         run: |
-          npm install
-          npm run build
+          npm ci
+          npm run build-all
