@@ -6,7 +6,9 @@ const webpack = require('webpack');
 module.exports = (env) => {
     return {
         mode: "development",
-        entry: './src/index.ts',
+        entry: {
+            index: './src/index.ts',
+        },
         plugins: [
             new webpack.DefinePlugin({
                 WEBSOCKET_URL: JSON.stringify((env.WEBSOCKET_URL !== undefined) ? env.WEBSOCKET_URL : '')
