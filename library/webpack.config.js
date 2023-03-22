@@ -29,7 +29,7 @@ module.exports = (env) => {
     },
     output: {
       filename: '[name].js',
-      library: 'spsfrontend',
+      library: 'libspsfrontend',
       libraryTarget: 'umd',
       path: path.resolve(__dirname, 'dist'),
       clean: true,
