@@ -1,7 +1,7 @@
 {
   "name": "spstypescriptexample",
   "version": "1.0.0",
-  "description": "The default example for consuming the Scalable Pixel Streaming Frontend",
+  "description": "The typescript example for consuming the Scalable Pixel Streaming Frontend",
   "main": "index.ts",
   "scripts": {
     "build": "npx webpack",
