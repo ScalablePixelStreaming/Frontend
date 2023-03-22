@@ -56,7 +56,7 @@ module.exports = (env) => {
         },
         output: {
             filename: '[name].js',
-            library: 'spsfrontendexample',
+            library: 'spstypescriptexample',
             libraryTarget: 'umd',
             path: path.resolve(__dirname, 'dist'),
             clean: true,

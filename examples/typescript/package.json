@@ -1,5 +1,5 @@
 {
-  "name": "spsfrontendexample",
+  "name": "spstypescriptexample",
   "version": "1.0.0",
   "description": "The default example for consuming the Scalable Pixel Streaming Frontend",
   "main": "index.ts",
