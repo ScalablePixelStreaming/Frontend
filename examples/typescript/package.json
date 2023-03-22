@@ -15,7 +15,6 @@
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
-    "@tensorworks/lib-spsfrontend": "^1.0.0",
     "@types/node": "^18.15.1",
     "@types/webpack": "^5.28.0",
     "@webpack-cli/generators": "^3.0.1",
