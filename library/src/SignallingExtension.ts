@@ -66,6 +66,10 @@ export class MessageAuthResponse extends MessageRecv {
  * Instance Request Message Wrapper
  */
 export class MessageRequestInstance extends MessageSend {
+
+	// An opaque string representing optional configuration data to pass to the signalling server for instance customisation
+	data: string
+
 	constructor() {
 		super();
 		this.type = "requestInstance";
