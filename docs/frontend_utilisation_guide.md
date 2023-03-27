@@ -24,7 +24,26 @@ The Pixel Streaming Frontend UI contains all the functionality for UI components
 
 ---
 
-## Getting Started
+## Getting Started Github
+### Installing the Scalable Pixel Streaming Frontend through Github
+1) Download the [Scalable Pixel Streaming Frontend source code from GitHub](https://github.com/ScalablePixelStreaming/Frontend)
+
+2) Run the following command in the `library` directory of the source tree:
+```bash
+# Install the frontend library's dependencies
+npm install
+```
+This will install both the Pixel Streaming Frontend and Frontend UI along with other dependencies which the Scalable Pixel Streaming Frontend consumes.
+
+
+
+
+## Getting Started NPM
+### Installing the Scalable Pixel Streaming Frontend through NPM
+1) Run the following command in a terminal `npm i @tensorworks/libspsfrontend`
+
+
+
 ### Installing the Scalable Pixel Streaming Frontend   
 1) Download the [Scalable Pixel Streaming Frontend source code from GitHub](https://github.com/ScalablePixelStreaming/Frontend)
 
