@@ -4,7 +4,8 @@
   "description": "The Scalable Pixel Streaming Frontend Library consuming Epic Games' Pixel Streaming Frontend",
   "main": "src/index.ts",
   "scripts": {
-    "build": "npx webpack",
+    "build-prod": "npx webpack --config webpack.prod.js",
+    "build-dev": "npx webpack --config webpack.dev.js",
     "watch": "npx webpack --watch",
     "serve": "webpack serve"
   },
