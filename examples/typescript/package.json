@@ -9,8 +9,9 @@
     "watch": "npx webpack --watch",
     "start": "npx webpack && open-cli ./dist/index.html",
     "serve": "webpack serve",
-    "build-all-dev": "cd ../../library && npm install && npm run build-dev && cd ../examples/typescript && npm install && npm link ../../library && npm run build-dev",
-    "build-all-prod": "cd ../../library && npm install && npm run build-prod && cd ../examples/typescript && npm install && npm link ../../library && npm run build-prod"
+    "symlink": "npm link ../../library",
+    "build-all-dev": "cd ../../library && npm install && npm run build-dev && cd ../examples/typescript && npm run symlink && npm run build-dev",
+    "build-all-prod": "cd ../../library && npm install && npm run build-prod && cd ../examples/typescript && npm run symlink && npm run build-prod"
   },
   "author": "TensorWorks Pty Ltd",
   "keywords": [],
