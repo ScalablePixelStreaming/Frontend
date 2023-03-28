@@ -4,11 +4,13 @@
   "description": "The typescript example for consuming the Scalable Pixel Streaming Frontend",
   "main": "index.ts",
   "scripts": {
-    "build": "npx webpack",
+    "build-dev": "npx webpack --config webpack.dev.js",
+    "build-prod": "npx webpack --config webpack.prod.js",
     "watch": "npx webpack --watch",
     "start": "npx webpack && open-cli ./dist/index.html",
     "serve": "webpack serve",
-    "build-all": "cd ../../library && npm install && npm run build && cd ../examples/typescript && npm install && npm link ../../library && npm run build"
+    "build-all-dev": "cd ../../library && npm install && npm run build-dev && cd ../examples/typescript && npm install && npm link ../../library && npm run build-dev",
+    "build-all-prod": "cd ../../library && npm install && npm run build-prod && cd ../examples/typescript && npm install && npm link ../../library && npm run build-prod"
   },
   "author": "TensorWorks Pty Ltd",
   "keywords": [],
