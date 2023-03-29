@@ -2,3 +2,5 @@ dist/
 node_modules/
 types/
 .vscode
+!.env.template
+.env
