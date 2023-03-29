@@ -32,4 +32,4 @@ jobs:
         id: npm
         run: |
           npm ci
-          npm run build-all
+          npm run build-all-prod
