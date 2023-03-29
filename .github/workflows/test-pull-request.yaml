@@ -1,4 +1,4 @@
-# The following workflow will run when a pull request is opened, synched or reopened
+# The following workflow will run when a pull request is opened, synced or reopened
 # It's intent is to run a build of the package against the PR to ensure that it passes a code build check
 
 name: test-build
