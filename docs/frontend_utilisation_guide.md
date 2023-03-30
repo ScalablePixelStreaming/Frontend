@@ -28,8 +28,7 @@ The Pixel Streaming Frontend UI contains all the functionality for UI components
 ### The Library
 The Library is the part of the Scalable Pixel Streaming Frontend that consumes the Epic Games Pixel Streaming Frontend and UI Frontend. It includes all of the custom signalling server logic that Scalable Pixel Streaming signalling servers require to work. The Library can be either obtained through [Github](https://github.com/ScalablePixelStreaming/Frontend) or [NPM](https://www.npmjs.com/package/@tensorworks/libspsfrontend). To make use of the Library it must be initialised via HTML and Javascript. The Example below is but one example of initialize the Library.  
 
-### The Example
-#### Typescript Example
+### The Typescript Example
 The Typescript Example is a simple HTML, CSS and TypeScript implementation of what a user could create to initialize the Scalable Pixel Streaming Frontend Library. Its role is to instantiate the library's components and help start the Scalable Pixel Streaming connection to the signalling server. Please note  how a user chooses to initialize Library is open to interpretation and the users requirements and is not limited to the Typescript Example.
 
 ### Building for Development vs Production
