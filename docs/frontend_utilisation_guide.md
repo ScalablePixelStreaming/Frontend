@@ -24,17 +24,52 @@ The Pixel Streaming Frontend UI contains all the functionality for UI components
 
 ---
 
-## Getting Started Github
-### Installing the Scalable Pixel Streaming Frontend through Github
+## Getting Started
+### The Library
+The Libary is the part of the Scalable Pixel Streaming Frontend that consumes the Epic Games Pixel Streaming Frontend and includes all of the custom signaling server logic that Scalable Pixel Streaming signaling servers require to work. The Libary can be either obtained through [Github]() or [NPM]() and to work must be paird consumed by some sort of implimentation to run and kick off the Scalable Pixel Streaming connection. 
+
+### The Example
+#### Typescript Example
+The typescript example is a simple HTML, CSS and TypeScript implementation of what a user may create to utalise and consume the Scalable Pixel Streaming Frontend Library. Its role is to instansiate the Librarys' components and help start the Scalable Pixel Streaming connection to the siginaling server. Please note consuming and using the Library is open to interpretation as well as the requirements of the user and is not limited to the example provided.
+
+### Building for Development vs Production
+Within the Scalable Pixel Streaming Frontend there are several scripts that can be run via npm to build the Library and Example for development or production pourposes. When building for development pourposes this will enable scource maps for debugging when devloping. Vicse versa when building for production this will disable scource maps, disable console and minimize the dist contents. Below are a list of npm commands for both the Library and Example and what each command does:
+#### Library commands
+Please ensure that all Library commands are ran from the `library` directory and first a user must run `npm install` first to install all dependencies.  
+- `npm run build-dev`: Build the Library in development mode
+- `npm run build-prod`: Build the Library in production mode
+
+#### Example commands
+Please ensure that all example commands are ran from the `examples/typescript` directory. It is allways reccomended that a user installs the Library first as the example requires the Library however contrary to this, any command that includes a `*` next to its description does not require the Library to be installed and built first.
+
+- `npm run build-dev`: Build the Library in development mode
+- `npm run build-prod`: Build the Library in production mode
+- `npm run build-all-dev`: `*`Build the Library and the Example in development mode and link the Library to the Example for consumption
+- `npm run build-all-prod`: `*`Build the Library and the Example in production mode and link the Library to the Example for consumption
+- `npm run serve-dev`: Serve the Example localy using the Library in development mode
+- `npm run serve-prod`: Serve the Example localy using the Library in production mode
+- `npm run symlink`: Links the Library to the Example for consumption
+
+
+### Installing the Scalable Pixel Streaming Frontend Library
 1) Download the [Scalable Pixel Streaming Frontend source code from GitHub](https://github.com/ScalablePixelStreaming/Frontend)
 
 2) Run the following command in the `library` directory of the source tree:
 ```bash
 # Install the frontend library's dependencies
-npm install
+npm install && npm run build-dev
 ```
-This will install both the Pixel Streaming Frontend and Frontend UI along with other dependencies which the Scalable Pixel Streaming Frontend consumes.
+This will install both the Pixel Streaming Frontend and Frontend UI along with other dependencies which the Scalable Pixel Streaming Frontend library consumes.
 
+### Installing the Scalable Pixel Streaming Frontend Example and Library
+1) Download the [Scalable Pixel Streaming Frontend source code from GitHub](https://github.com/ScalablePixelStreaming/Frontend)
+
+2) Run the following command in the `examples/typescript` directory of the source tree:
+```bash
+# Install the frontend library's dependencies
+npm run build-all-dev
+```
+This will install the Scalable Pixel Streaming Frontend Example and Library.
 
 
 
