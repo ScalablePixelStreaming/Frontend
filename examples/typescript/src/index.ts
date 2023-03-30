@@ -15,7 +15,7 @@ document.body.onload = function () {
 
 	// make usage of WEBSOCKET_URL if it is not empty
 	let webSocketAddress = WEBSOCKET_URL;
-	if(webSocketAddress !== ""){
+	if(webSocketAddress != ""){
 		config.setTextSetting(TextParameters.SignallingServerUrl, webSocketAddress)
 	}
 
