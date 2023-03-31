@@ -201,7 +201,7 @@ if(webSocketAddress != ""){
 
 ---
 ## Scalable Pixel Streaming Frontend customisation
-By default the Scalable Pixel Streaming Frontend contains all the requirements to connect to a Scalable Pixel Streaming signalling server making it an effective starting template for further customisation rather than starting from scratch. For further ways to utilise the the Pixel Streaming Frontend refer to the [Pixel Streaming Frontend documentation](https://github.com/EpicGames/PixelStreamingInfrastructure#readme).   
+By default the Scalable Pixel Streaming Frontend Library contains all the requirements to connect to a Scalable Pixel Streaming signalling server making it an effective starting template for further customisation rather than starting from scratch. It is able to achieve this functionality through its consumption of the Epic Games Pixel Streaming Frontend. To learn more about further utilising the Epic Games Pixel Streaming Frontend documentation can be found [here](https://github.com/EpicGames/PixelStreamingInfrastructure#readme).   
 
 ### Scalable Pixel Streaming Frontend UI element customisation
-Further customisation of UI elements like Overlays or visual elements can be achieved by utilising the Pixel Streaming Frontend UI and extending its types. For further information on how to utilise the Epic Games Pixel Streaming Frontend UI refer to the [Pixel Streaming Frontend UI documentation](https://github.com/EpicGames/PixelStreamingInfrastructure#readme).
+Further customisation of UI elements like Overlays or visual elements can also be achieved by utilising the Pixel Streaming Frontend UI and extending its types. For further information on how to utilise the Epic Games Pixel Streaming Frontend UI refer to the [Pixel Streaming Frontend UI documentation](https://github.com/EpicGames/PixelStreamingInfrastructure#readme).
