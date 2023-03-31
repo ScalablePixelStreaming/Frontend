@@ -94,7 +94,7 @@ If your project includes a `package.json` file run the following command in the 
 2) Import your desired components form the Library from the following package `"@tensorworks/libspsfrontend"` 
 
 #### Basics to initialising and consuming the Library
-The following example for initialising the Library is based on the Typescript Example Provided on Github. 
+The following example for initialising the Library is based on the Typescript Example Provided on Github however is more broad. 
 
 1) Import all the required packages from the Scalable Pixel Streaming Frontend Library
 ```typescript
@@ -105,9 +105,9 @@ import {Config, PixelStreaming, SPSApplication, TextParameters, PixelStreamingAp
 export const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
 PixelStreamingApplicationStyles.applyStyleSheet();
 ``` 
-3) Declare the `WEBSOCKET_URL` environment variable so the websocket url can be injected via a `.env` file
+3) Create a `webSocketAddress` variable so the websocket url can be modified if a user wishes to inject their own websocket address at load time
 ```typescript
-declare var WEBSOCKET_URL: string;
+let webSocketAddress = "";
 ```
 4) Create a `document.body.onload` function to automate the activation and creation of steps 5-8   
 ```typescript
@@ -119,12 +119,11 @@ document.body.onload = function () {
 ```typescript
 const config = new Config({ useUrlParams: true, initialSettings: { OfferToReceive: true, TimeoutIfIdle: true } });
 ```
-6) Create an if statement that will make use of the `WEBSOCKET_URL` environment variable if one is included 
+6) Create an if statement that will make use of the `webSocketAddress` variable if one is included 
 ```typescript
-let webSocketAddress = WEBSOCKET_URL;
-	if(webSocketAddress != ""){
-		config.setTextSetting(TextParameters.SignallingServerUrl, webSocketAddress)
-	}
+if(webSocketAddress != ""){
+	config.setTextSetting(TextParameters.SignallingServerUrl, webSocketAddress)
+}
 ```
 7) Create `stream` and `spsApplication` instances that implement the Epic Games Pixel Streaming Frontend PixelStreaming and Application types
 ```typescript
@@ -146,11 +145,10 @@ document.getElementById("myElementId").appendChild(spsApplication.rootElement);
 import {Config, PixelStreaming, SPSApplication, TextParameters, PixelStreamingApplicationStyle} from "@tensorworks/libspsfrontend";
 export const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
 PixelStreamingApplicationStyles.applyStyleSheet();
-declare var WEBSOCKET_URL: string;
+let webSocketAddress = "";
 
 document.body.onload = function () {
 	const config = new Config({ useUrlParams: true, initialSettings: { OfferToReceive: true, TimeoutIfIdle: true } });
-	let webSocketAddress = WEBSOCKET_URL;
 	if(webSocketAddress != ""){
 		config.setTextSetting(TextParameters.SignallingServerUrl, webSocketAddress)
 	}
@@ -163,17 +161,42 @@ document.body.onload = function () {
 }
 ```
 
-### Connecting to a WebSocket 
-When serving the Scalable Pixel Streaming Frontend it will build a default WebSocket address to connect to based on the address of the current window of the webpage. If the WebSocket address happens to match what is created by default then no further steps are required however, this is not always the case. In the stage of creating the `config` object for our entry point it is possible to inject a WebSocket address that will override the default that is created:
+### Customising the WebSocket connection
+#### Using setTextSetting within Config to inject a custom websocket
+When serving the Scalable Pixel Streaming Frontend it will build a default WebSocket address to connect to based on the address of the current window of the webpage. If the WebSocket address happens to match what is created by default then no further steps are required however, this is not always the case. Through the usage of `setTextSetting` method on our `config` instance a user can inject a WebSocket address that will override the default. Steps to achieving this are covered in Basics to initialising and consuming the Library steps 3 and 6.
+#### The .env file for the Typescript Example
+In the Typescript Example there is a `.env.example` file. inside this file there is a line called `WEBSOCKET_URL` containing a filler url. This file can be used to hard code a websocket address that can be consumed by the example as shown above. This example is able to work with the help of the [dotenv npm package](https://www.npmjs.com/package/dotenv) in the `webpack.common.js` file in the Typescript Example. To implement this example steps:
+1) Rename the `.env.example` to `.env`
+2) Replace the place holder url with the websocket url you wish to consume
+3) Rebuild the example with the `npm run build-dev` or `npm run build-prod` for the changes to take effect
 
-1) After completing `Implementing the Scalable Pixel Streaming frontend in a custom webpage` steps 1-8 import the `TextParameters` package from the Pixel Streaming Frontend
-```typescript
-import { Config, PixelStreaming, TextParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.2';
+If you wish to include this functionality in your project you will need to include the following steps:
+The Typescript Example makes use of these exact steps and is a good demonstration resource on this topic. 
+1) Install `dotenv` via npm `npm i dotenv --save-dev`
+2) Include `dotenv` in you webpack file and set your `.env` file path using `path:`
+```javascript
+require('dotenv').config({ path: './.env' }); 
+```  
+3) Include a plugin in your webpack file with the environment variables name. For this example the name will be set to `WEBSOCKET_URL`
+```javascript
+new webpack.DefinePlugin({
+	WEBSOCKET_URL: JSON.stringify((process.env.WEBSOCKET_URL !== undefined) ? process.env.WEBSOCKET_URL : '')
+}),
 ```
-2) Beneath the line where the `config` object was created call the `setTextSetting` method and pass in `TextParameters.SignallingServerUrl` and your websocket address as a string
+4) Create the `.env` file in the path you set in step 3 with the variable of your choice
+```bash
+WEBSOCKET_URL=ws://example.com/your/ws
+```
+5) Declare your environment variable where you instantiate your Scalable Pixel Streaming Frontend Library 
 ```typescript
-const config = new Config({ useUrlParams: true, initialSettings: { OfferToReceive: true, TimeoutIfIdle: true } });
-config.setTextSetting(TextParameters.SignallingServerUrl, "wss://your.websocket.url/ws")
+declare var WEBSOCKET_URL: string;
+```
+6) Make use of the `setTextSetting` method within the `config` instance to set the `TextParameters.SignallingServerUrl` to a variable that makes use of `WEBSOCKET_URL`
+```typescript
+let webSocketAddress = WEBSOCKET_URL;
+if(webSocketAddress != ""){
+	config.setTextSetting(TextParameters.SignallingServerUrl, webSocketAddress)
+}
 ```
 
 ---
