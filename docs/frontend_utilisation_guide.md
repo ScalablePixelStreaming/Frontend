@@ -87,55 +87,28 @@ npm run build-all-dev
 ```
 This will install, link and build the Scalable Pixel Streaming Frontend Example and Library all in one.
 
-
-
-## Getting Started NPM
 ### Installing the Scalable Pixel Streaming Frontend through NPM
-1) Run the following command in a terminal `npm i @tensorworks/libspsfrontend`
+If your project includes a `package.json` file run the following command in the same directory
+1) Run the following command: `npm i @tensorworks/libspsfrontend`
 
+2) Import your desired components form the Library from the following package `"@tensorworks/libspsfrontend"` 
 
+#### Basics to initialising and consuming the Library
+The following example for initialising the Library is based on the Typescript Example Provided on Github. 
 
-### Installing the Scalable Pixel Streaming Frontend   
-1) Download the [Scalable Pixel Streaming Frontend source code from GitHub](https://github.com/ScalablePixelStreaming/Frontend)
-
-2) Run the following command in the base directory of the source tree:
-```bash
-# Install the frontend library's dependencies
-npm install .
-```
-This will install both the Pixel Streaming Frontend and Frontend UI along with other dependencies which the Scalable Pixel Streaming Frontend consumes. 
-
-### Running the Scalable Pixel Streaming Frontend locally
-1) To run the Frontend locally after installing simply run the following command from the base directory of the source tree:
-```bash
-# Build the frontend library
-npm run build
-```
-
-### Building the Scalable Pixel Streaming Frontend
-1) Run the following command in the base directory of the source tree:
-```bash
-# Install the frontend library's dependencies
-npm install .
-```
-This will transpile the TypeScript source files to JavaScript and generate the UMD module in the dist subdirectory. 
-
-### Implementing the Scalable Pixel Streaming Frontend in a custom webpage
-The Scalable Pixel Streaming Frontend comes with a base index.ts file which is the entry point. In a custom webpage this file can be left out and a custom entry point can be implemented: 
-
-1) Import all the required packages from the Epic Games Pixel Streaming Frontend and Frontend UI libraries
+1) Import all the required packages from the Scalable Pixel Streaming Frontend Library
 ```typescript
-import { Config, PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.2';
-import { PixelStreamingApplicationStyle } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.2';
+import {Config, PixelStreaming, SPSApplication, TextParameters, PixelStreamingApplicationStyle} from "@tensorworks/libspsfrontend";
 ```
-2) Import SPSApplication from the Scalable Pixel Streaming Frontend Library 
-```typescript
-import { SPSApplication } from "./SPSApplication";
-```
-3) Create `PixelStreamingApplicationStyles` variable so we have access to the Epic Games Pixel Streaming CSS: 
+2) Apply default styling from Epic Games Pixel Streaming Frontend 
 ```typescript
 export const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
+PixelStreamingApplicationStyles.applyStyleSheet();
 ``` 
+3) Declare the `WEBSOCKET_URL` environment variable so the websocket url can be injected via a `.env` file
+```typescript
+declare var WEBSOCKET_URL: string;
+```
 4) Create a `document.body.onload` function to automate the activation and creation of steps 5-8   
 ```typescript
 document.body.onload = function () {
@@ -146,15 +119,22 @@ document.body.onload = function () {
 ```typescript
 const config = new Config({ useUrlParams: true, initialSettings: { OfferToReceive: true, TimeoutIfIdle: true } });
 ```
-6) Create the `stream` object and pass in the new `config` object
+6) Create an if statement that will make use of the `WEBSOCKET_URL` environment variable if one is included 
+```typescript
+let webSocketAddress = WEBSOCKET_URL;
+	if(webSocketAddress != ""){
+		config.setTextSetting(TextParameters.SignallingServerUrl, webSocketAddress)
+	}
+```
+7) Create `stream` and `spsApplication` instances that implement the Epic Games Pixel Streaming Frontend PixelStreaming and Application types
 ```typescript
 const stream = new PixelStreaming(config);
+const spsApplication = new SPSApplication({
+	stream,
+	onColorModeChanged: (isLightMode) => PixelStreamingApplicationStyles.setColorMode(isLightMode) /* Light/Dark mode support. */
+});
 ```
-7) Create the `spsApplication` object and pass in the `stream` object enclosed in curly braces
-```typescript
-const spsApplication = new SPSApplication({ stream });
-```
-8) Place `spsApplication.rootElement` inside a DOM Element of your choice or inject directly into the body of the web page
+8) Append the `spsApplication.rootElement` inside a DOM Element of your choice or inject directly into the body of the web page like in the TypeScript Example
 ```typescript
 document.body.appendChild(spsApplication.rootElement);
 //OR
@@ -163,15 +143,22 @@ document.getElementById("myElementId").appendChild(spsApplication.rootElement);
 
 ### Default Index Implementation
 ```typescript
-import { Config, PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.2';
-import { PixelStreamingApplicationStyle } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.2';
-import { SPSApplication } from "./SPSApplication";
+import {Config, PixelStreaming, SPSApplication, TextParameters, PixelStreamingApplicationStyle} from "@tensorworks/libspsfrontend";
 export const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
+PixelStreamingApplicationStyles.applyStyleSheet();
+declare var WEBSOCKET_URL: string;
 
 document.body.onload = function () {
 	const config = new Config({ useUrlParams: true, initialSettings: { OfferToReceive: true, TimeoutIfIdle: true } });
+	let webSocketAddress = WEBSOCKET_URL;
+	if(webSocketAddress != ""){
+		config.setTextSetting(TextParameters.SignallingServerUrl, webSocketAddress)
+	}
 	const stream = new PixelStreaming(config);
-	const spsApplication = new SPSApplication({ stream });
+	const spsApplication = new SPSApplication({
+		stream,
+		onColorModeChanged: (isLightMode) => PixelStreamingApplicationStyles.setColorMode(isLightMode) /* Light/Dark mode support. */
+	});
 	document.body.appendChild(spsApplication.rootElement);
 }
 ```
