@@ -25,78 +25,78 @@ The Pixel Streaming Frontend UI contains all the functionality for UI components
 ---
 
 ## Scalable Pixel Streaming Frontend packages
-### The Library
-The Library is the part of the Scalable Pixel Streaming Frontend that consumes the Epic Games Pixel Streaming Frontend and UI Frontend. It includes all of the custom signalling server logic that Scalable Pixel Streaming signalling servers require to work. The Library can be either obtained through [Github](https://github.com/ScalablePixelStreaming/Frontend) or [NPM](https://www.npmjs.com/package/@tensorworks/libspsfrontend). To make use of the Library it must be initialised via HTML and Javascript. The library is written in TypeScript but configured to export as a UMD module and can be consumed by plain JavaScript and most JavaScript frameworks.  
+### The library
+The library is the part of the Scalable Pixel Streaming Frontend that consumes the Epic Games Pixel Streaming Frontend and UI Frontend. It includes all of the custom signalling server logic that Scalable Pixel Streaming signalling servers require to work. The library can be either obtained through [Github](https://github.com/ScalablePixelStreaming/Frontend) or [NPM](https://www.npmjs.com/package/@tensorworks/libspsfrontend). To make use of the library it must be initialised via HTML and Javascript. The library is written in TypeScript but configured to export as a UMD module and can be consumed by plain JavaScript and most JavaScript frameworks.  
 
-### The Typescript Example
-The Typescript Example is a simple HTML, CSS and TypeScript implementation of what a user could create to initialize the Scalable Pixel Streaming Frontend Library. Its role is to instantiate the library's components and help start the Scalable Pixel Streaming connection to the signalling server. Please note  how a user chooses to initialize Library is open to interpretation and the users requirements and is not limited to the Typescript Example.
+### The Typescript example
+The Typescript example is a simple HTML, CSS and TypeScript implementation of what a user could create to initialize the Scalable Pixel Streaming Frontend library. Its role is to instantiate the library's components and help start the Scalable Pixel Streaming connection to the signalling server. Please note  how a user chooses to initialize library is open to interpretation and the users requirements and is not limited to the Typescript example.
 ## Getting Started; installation and consumption
 ### Building for Development vs Production
-Within the Scalable Pixel Streaming Frontend there are several npm scripts that can be used to build the Library and Example for either development or production use cases. When building for development this will enable source maps for debugging. When building for production this will disable source maps, minimize console output and minimize the dist contents. Below are a list of npm scripts for both the Library and Example and what each command does:
+Within the Scalable Pixel Streaming Frontend there are several npm scripts that can be used to build the library and example for either development or production use cases. When building for development this will enable source maps for debugging. When building for production this will disable source maps, minimize console output and minimize the dist contents. Below are a list of npm scripts for both the library and example and what each command does:
 
-#### Library scripts
-Please ensure that all Library scripts are executed from the `library` directory and a user must first run `npm install` to install all the Libraries dependencies.  
-- `npm run build-dev`: Build the Library in development mode
-- `npm run build-prod`: Build the Library in production mode
+#### library scripts
+Please ensure that all library scripts are executed from the `library` directory and a user must first run `npm install` to install all the Libraries dependencies.  
+- `npm run build-dev`: Build the library in development mode
+- `npm run build-prod`: Build the library in production mode
 
-#### Example scripts
-Please ensure that all example scripts are executed from the `examples/typescript` directory. It is always recommended that a user installs the Library first as the example requires the Library. Contrary to this however, `build-all-dev` and `build-all-prod` do not require the Library to be installed and built first and will install and build both the Library and Example and all dependencies.
-- `npm run build-dev`: Build the Library in development mode
-- `npm run build-prod`: Build the Library in production mode
-- `npm run serve-dev`: Serve the Example locally using the Library in development mode
-- `npm run serve-prod`: Serve the Example locally using the Library in production mode
-- `npm run symlink`: Links the Library to the Example for consumption
-- `npm run build-all-dev`: Build the Library and the Example in development mode and link the Library to the Example for consumption
-- `npm run build-all-prod`: Build the Library and the Example in production mode and link the Library to the Example for consumption
+#### example scripts
+Please ensure that all example scripts are executed from the `examples/typescript` directory. It is always recommended that a user installs the library first as the example requires the library. Contrary to this however, `build-all-dev` and `build-all-prod` do not require the library to be installed and built first and will install and build both the library and example and all dependencies.
+- `npm run build-dev`: Build the library in development mode
+- `npm run build-prod`: Build the library in production mode
+- `npm run serve-dev`: Serve the example locally using the library in development mode
+- `npm run serve-prod`: Serve the example locally using the library in production mode
+- `npm run symlink`: Links the library to the example for consumption
+- `npm run build-all-dev`: Build the library and the example in development mode and link the library to the example for consumption
+- `npm run build-all-prod`: Build the library and the example in production mode and link the library to the example for consumption
 
-### Installing the Scalable Pixel Streaming Frontend Library From Github
+### Installing the Scalable Pixel Streaming Frontend library From Github
 Please note the following installation will be done with `dev` npm scripts however, it can also be done with `prod` build scripts.
 
 1) Download the [Scalable Pixel Streaming Frontend source code from GitHub](https://github.com/ScalablePixelStreaming/Frontend)
 
-2) To build the Library run the following commands in the `library` directory of the source tree:
+2) To build the library run the following commands in the `library` directory of the source tree:
 ```bash
-# Install the Frontend Library's dependencies
+# Install the Frontend library's dependencies
 npm install 
 
-# Build the Frontend Library
+# Build the Frontend library
 npm run build-dev
 ```
-These commands and scripts will install and build the Library.
+These commands and scripts will install and build the library.
 
 3) Run the following commands in the `examples/typescript` directory of the source tree:
 ```bash
-# Install the Examples's dependencies
+# Install the examples's dependencies
 npm npm install
 
-# Symlink the Library to the Example
+# Symlink the library to the example
 npm run symlink
 
-# Build the Example
+# Build the example
 npm run build-dev
 ```
-These commands and scripts will install the Example, link the Library to the Example and build the Example.
+These commands and scripts will install the example, link the library to the example and build the example.
 
 #### Installing and building with the build-all script
 1) Download the [Scalable Pixel Streaming Frontend source code from GitHub](https://github.com/ScalablePixelStreaming/Frontend)
 
 2) Run the following script in the `examples/typescript` directory of the source tree:
 ```bash
-# Install, link and build the Example and Library
+# Install, link and build the example and library
 npm run build-all-dev
 ```
-This will install, link and build the Scalable Pixel Streaming Frontend Example and Library all in one.
+This will install, link and build the Scalable Pixel Streaming Frontend example and library all in one.
 
 ### Installing the Scalable Pixel Streaming Frontend through NPM
 If your project includes a `package.json` file run the following command in the same directory
 1) Run the following command: `npm i @tensorworks/libspsfrontend`
 
-2) Import your desired components form the Library from the following package `"@tensorworks/libspsfrontend"` 
+2) Import your desired components form the library from the following package `"@tensorworks/libspsfrontend"` 
 
-#### Basics to initialising and consuming the Library
-The following example for initialising the Library is based on the Typescript Example Provided on Github however is more broad. 
+#### Basics to initialising and consuming the library
+The following example for initialising the library is based on the Typescript example Provided on Github however is more broad. 
 
-1) Import all the required packages from the Scalable Pixel Streaming Frontend Library
+1) Import all the required packages from the Scalable Pixel Streaming Frontend library
 ```typescript
 import {Config, PixelStreaming, SPSApplication, TextParameters, PixelStreamingApplicationStyle} from "@tensorworks/libspsfrontend";
 ```
@@ -133,7 +133,7 @@ const spsApplication = new SPSApplication({
 	onColorModeChanged: (isLightMode) => PixelStreamingApplicationStyles.setColorMode(isLightMode) /* Light/Dark mode support. */
 });
 ```
-8) Append the `spsApplication.rootElement` inside a DOM Element of your choice or inject directly into the body of the web page like in the TypeScript Example
+8) Append the `spsApplication.rootElement` inside a DOM Element of your choice or inject directly into the body of the web page like in the TypeScript example
 ```typescript
 document.body.appendChild(spsApplication.rootElement);
 //OR
@@ -163,15 +163,15 @@ document.body.onload = function () {
 
 ### Customising the WebSocket connection
 #### Using setTextSetting within Config to inject a custom websocket
-When serving the Scalable Pixel Streaming Frontend it will build a default WebSocket address to connect to based on the address of the current window of the webpage. If the WebSocket address happens to match what is created by default then no further steps are required however, this is not always the case. Through the usage of `setTextSetting` method on our `config` instance a user can inject a WebSocket address that will override the default. Steps to achieving this are covered in Basics to initialising and consuming the Library steps 3 and 6.
-#### The .env file for the Typescript Example
-In the Typescript Example there is a `.env.example` file. inside this file there is a line called `WEBSOCKET_URL` containing a filler url. This file can be used to hard code a websocket address that can be consumed by the example as shown above. This example is able to work with the help of the [dotenv npm package](https://www.npmjs.com/package/dotenv) in the `webpack.common.js` file in the Typescript Example. To implement this example steps:
+When serving the Scalable Pixel Streaming Frontend it will build a default WebSocket address to connect to based on the address of the current window of the webpage. If the WebSocket address happens to match what is created by default then no further steps are required however, this is not always the case. Through the usage of `setTextSetting` method on our `config` instance a user can inject a WebSocket address that will override the default. Steps to achieving this are covered in Basics to initialising and consuming the library steps 3 and 6.
+#### The .env file for the Typescript example
+In the Typescript example there is a `.env.example` file. inside this file there is a line called `WEBSOCKET_URL` containing a filler url. This file can be used to hard code a websocket address that can be consumed by the example as shown above. This example is able to work with the help of the [dotenv npm package](https://www.npmjs.com/package/dotenv) in the `webpack.common.js` file in the Typescript example. To implement this example steps:
 1) Rename the `.env.example` to `.env`
 2) Replace the place holder url with the websocket url you wish to consume
 3) Rebuild the example with the `npm run build-dev` or `npm run build-prod` for the changes to take effect
 
 If you wish to include this functionality in your project you will need to include the following steps:
-The Typescript Example makes use of these exact steps and is a good demonstration resource on this topic. 
+The Typescript example makes use of these exact steps and is a good demonstration resource on this topic. 
 1) Install `dotenv` via npm `npm i dotenv --save-dev`
 2) Include `dotenv` in you webpack file and set your `.env` file path using `path:`
 ```javascript
@@ -187,7 +187,7 @@ new webpack.DefinePlugin({
 ```bash
 WEBSOCKET_URL=ws://example.com/your/ws
 ```
-5) Declare your environment variable where you instantiate your Scalable Pixel Streaming Frontend Library 
+5) Declare your environment variable where you instantiate your Scalable Pixel Streaming Frontend library 
 ```typescript
 declare var WEBSOCKET_URL: string;
 ```
@@ -201,7 +201,7 @@ if(webSocketAddress != ""){
 
 ---
 ## Scalable Pixel Streaming Frontend customisation
-By default the Scalable Pixel Streaming Frontend Library contains all the requirements to connect to a Scalable Pixel Streaming signalling server making it an effective starting template for further customisation rather than starting from scratch. It is able to achieve this functionality through its consumption of the Epic Games Pixel Streaming Frontend. To learn more about further utilising the Epic Games Pixel Streaming Frontend documentation can be found [here](https://github.com/EpicGames/PixelStreamingInfrastructure#readme).   
+By default the Scalable Pixel Streaming Frontend library contains all the requirements to connect to a Scalable Pixel Streaming signalling server making it an effective starting template for further customisation rather than starting from scratch. It is able to achieve this functionality through its consumption of the Epic Games Pixel Streaming Frontend. To learn more about further utilising the Epic Games Pixel Streaming Frontend documentation can be found [here](https://github.com/EpicGames/PixelStreamingInfrastructure#readme).   
 
 ### Scalable Pixel Streaming Frontend UI element customisation
 Further customisation of UI elements like Overlays or visual elements can also be achieved by utilising the Pixel Streaming Frontend UI and extending its types. For further information on how to utilise the Epic Games Pixel Streaming Frontend UI refer to the [Pixel Streaming Frontend UI documentation](https://github.com/EpicGames/PixelStreamingInfrastructure#readme).
