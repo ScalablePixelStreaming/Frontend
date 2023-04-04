@@ -1,4 +1,4 @@
-# The following workflow will run when a pull request is opened, synched or reopened
+# The following workflow will run when a pull request is opened, synced or reopened
 # It's intent is to run a build of the package against the PR to ensure that it passes a code build check
 
 name: test-build
@@ -26,10 +26,30 @@ jobs:
         with:
           node-version: "16.x"
 
-      # install deps for frontend and library and build both
-      - name: Install library and frontend deps and build
-        working-directory: ./examples/typescript
-        id: npm
+      # install deps for Library and build for development
+      - name: Install and build library for development
+        working-directory: ./library
         run: |
           npm ci
-          npm run build-all
+          npm run build-dev
+
+      # install deps for Library and build for production
+      - name: Install and build library for production
+        working-directory: ./library
+        run: |
+          npm ci
+          npm run build-prod
+
+      # install deps for Frontend and Library and build both for development
+      - name: Install and build library and Frontend for development
+        working-directory: ./examples/typescript
+        run: |
+          npm ci
+          npm run build-all-dev
+      
+      # install deps for Frontend and Library for and build both for production
+      - name: Install and build library and Frontend for production
+        working-directory: ./examples/typescript
+        run: |
+          npm ci
+          npm run build-all-prod

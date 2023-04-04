@@ -43,7 +43,7 @@ jobs:
     - name: Build SPS Frontend
       run: |
         cd ./examples/typescript      
-        npm run build-all
+        npm run build-all-prod
 
       # Build the Scalable Pixel Streaming Frontend Docker image from the dist directories of the packages
     - name: Build the Scalable Pixel Streaming Frontend Docker image and push to Docker
