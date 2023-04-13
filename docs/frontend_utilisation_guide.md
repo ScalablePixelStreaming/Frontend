@@ -1,6 +1,6 @@
 # Utilising the Frontend
 ## Overview 
-The Scalable Pixel Streaming Frontend is a library of HTML, CSS and TypeScript code that runs in client web browsers to help users connect to Scalable Pixel Streaming applications and interact with them. It is able to achieve this by consuming the Pixel Streaming Frontend and UI libraries and by extending their signalling server and WebSocket packages the Pixel Streaming Fronted can be configured to work with Scalable Pixel Streaming signalling severs.   
+The Scalable Pixel Streaming Frontend is a library of HTML, CSS and TypeScript code that runs in client web browsers to help users connect to Scalable Pixel Streaming applications and interact with them. It is able to achieve this by consuming the Pixel Streaming Frontend and UI libraries and by extending their signalling server and WebSocket packages the Pixel Streaming Frontend can be configured to work with Scalable Pixel Streaming signalling severs.   
 
 ## Epic Games Pixel Streaming Frontend and UI Frontend
 For the base functionality for Pixel Streaming and its UI capabilities the Scalable Pixel Streaming Frontend consumes the Epic Games Pixel Streaming Frontend and UI Frontend:
@@ -166,9 +166,9 @@ document.body.onload = function () {
 #### Using setTextSetting within Config to inject a custom WebSocket
 When serving the Scalable Pixel Streaming Frontend it will build a default WebSocket address to connect to based on the address of the current window of the webpage. If the WebSocket address matches what is created by default then no further steps are required. Users can override the default by using the `setTextSetting` method on our `config` instance. See the section: Basics to initialising and consuming the library (link) steps 3 and 6.
 #### The .env file for the TypeScript example
-In the TypeScript example there is a `.env.example` file. inside this file there is a line called `WEBSOCKET_URL` containing a filler url. This file can be used to hard code a WebSocket address that can be consumed by the example as shown above. This example is able to work with the help of the [dotenv NPM package](https://www.npmjs.com/package/dotenv) in the `webpack.common.js` file in the Typescript example. To implement this example follow these steps:
+In the TypeScript example there is a `.env.example` file. inside this file there is a line called `WEBSOCKET_URL` containing a filler URL. This file can be used to hard code a WebSocket address that can be consumed by the example as shown above. This example is able to work with the help of the [dotenv NPM package](https://www.npmjs.com/package/dotenv) in the `webpack.common.js` file in the TypeScript example. To implement this example follow these steps:
 1) Rename the `.env.example` to `.env`
-2) Replace the place holder url with the WebSocket URL you wish to consume
+2) Replace the place holder URL with the WebSocket URL you wish to consume
 3) Rebuild the example with the `npm run build-dev` or `npm run build-prod` for the changes to take effect
 
 If you wish to include this functionality in your project you will need to include the following steps:
