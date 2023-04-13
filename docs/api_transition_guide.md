@@ -61,12 +61,3 @@ pixelStreaming.addEventListener("videoInitialized", ()=> { /* Do something */ })
 (More details [here](https://github.com/EpicGames/PixelStreamingInfrastructure/pull/110))
 
 ------
-
-### NPM Packages
-The old [`libspsfrontend`](https://www.npmjs.com/package/@tensorworks/libspsfrontend) package is now deprecated in favour of [`spsfrontend`](https://www.npmjs.com/package/@tensorworks/spsfrontend).
-
-Add `spsfrontend` to your project like so:
-
-```
-npm i @tensorworks/spsfrontend
-```
