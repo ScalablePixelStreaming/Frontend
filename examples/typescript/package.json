@@ -1,6 +1,6 @@
 {
   "name": "@tensorworks/spstypescriptexample",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The typescript example for consuming the Scalable Pixel Streaming Frontend",
   "main": "./src/index.ts",
   "scripts": {
@@ -17,6 +17,9 @@
   "author": "TensorWorks Pty Ltd",
   "keywords": [],
   "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.3"
+  },
   "devDependencies": {
     "@types/node": "^18.15.1",
     "@types/webpack": "^5.28.0",
@@ -25,7 +28,6 @@
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
     "declaration-bundler-webpack-plugin": "^1.0.3",
-    "dotenv": "^16.0.3",
     "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.0",
     "style-loader": "^3.3.1",
