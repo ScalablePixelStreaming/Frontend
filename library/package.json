@@ -1,6 +1,6 @@
 {
   "name": "@tensorworks/libspsfrontend",
-  "version": "1.0.0",
+  "version": "0.3.0",
   "description": "The Scalable Pixel Streaming Frontend Library consuming Epic Games' Pixel Streaming Frontend",
   "main": "src/index.ts",
   "scripts": {
