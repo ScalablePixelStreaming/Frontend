@@ -164,7 +164,7 @@ document.body.onload = function () {
 
 ### Customising the WebSocket connection
 #### Using setTextSetting within Config to inject a custom WebSocket
-When serving the Scalable Pixel Streaming Frontend it will build a default WebSocket address to connect to based on the address of the current window of the webpage. If the WebSocket address matches what is created by default then no further steps are required. Users can override the default by using the `setTextSetting` method on our `config` instance. See the section: Basics to initialising and consuming the library (link) steps 3 and 6.
+When serving the Scalable Pixel Streaming Frontend it will build a default WebSocket address to connect to based on the address of the current window of the webpage. If the WebSocket address matches what is created by default then no further steps are required. Users can override the default by using the `setTextSetting` method on our `config` instance. See the section: [Basics to initialising and consuming the library](frontend_utilisation_guide.md#basics-to-initialising-and-consuming-the-library) steps 3 and 6.
 #### The .env file for the TypeScript example
 In the TypeScript example there is a `.env.example` file. inside this file there is a line called `WEBSOCKET_URL` containing a filler URL. This file can be used to hard code a WebSocket address that can be consumed by the example as shown above. This example is able to work with the help of the [dotenv NPM package](https://www.npmjs.com/package/dotenv) in the `webpack.common.js` file in the TypeScript example. To implement this example follow these steps:
 1) Rename the `.env.example` to `.env`
