@@ -13,7 +13,7 @@ const prodCommon = {
 module.exports = [
   merge(common, prodCommon, {
     output: {
-      filename: 'libspsfrontend.js',
+      filename: 'libspsfrontend.min.js',
       library: {
         name: 'libspsfrontend', // exposed variable that will provide access to the library classes
         type: 'umd'

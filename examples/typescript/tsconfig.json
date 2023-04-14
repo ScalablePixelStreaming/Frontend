@@ -4,7 +4,7 @@
     "noImplicitAny": true,
     "module": "es6",
     "esModuleInterop": true,
-    "target": "ES6",
+    "target": "es5",
     "moduleResolution": "node",
     "sourceMap": false,
     "allowJs": true,
@@ -14,7 +14,6 @@
     "es2015"
   ],
   "include": [
-    "./src/*.ts",
-    "index.d.ts"
+    "./src/*.ts"
   ],
 }

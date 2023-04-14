@@ -1,8 +1,10 @@
 {
   "name": "@tensorworks/libspsfrontend",
-  "version": "0.3.1",
+  "version": "0.3.0",
   "description": "The Scalable Pixel Streaming Frontend Library consuming Epic Games' Pixel Streaming Frontend",
-  "main": "src/index.ts",
+  "main": "dist/libspsfrontend.min.js",
+  "module": "dist/libspsfrontend.esm.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "build-prod": "npx webpack --config webpack.prod.js",
     "build-dev": "npx webpack --config webpack.dev.js",
@@ -23,6 +25,7 @@
     "ts-loader": "^9.4.2",
     "webpack": "^5.76.1",
     "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.11.1"
+    "webpack-dev-server": "^4.11.1",
+    "typescript": "^4.9.4"
   }
 }
