@@ -1,0 +1,55 @@
+# The following workflow will run when a pull request is opened, synced or reopened
+# It's intent is to run a build of the package against the PR to ensure that it passes a code build check
+
+name: test-build
+on: pull_request
+    
+jobs:
+
+  # This job will checkout the repo, install dependencies and then build the frontend package
+  test-build-frontend-and-lib:
+    runs-on: ubuntu-latest
+
+    # set out working directory
+    defaults:
+      run:
+        working-directory: ./
+
+    # checkout, install node and run our npm commands to check code builds
+    steps:
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      # install deps for Library and build for development
+      - name: Install and build library for development
+        working-directory: ./library
+        run: |
+          npm ci
+          npm run build-dev
+
+      # install deps for Library and build for production
+      - name: Install and build library for production
+        working-directory: ./library
+        run: |
+          npm ci
+          npm run build-prod
+
+      # install deps for Frontend and Library and build both for development
+      - name: Install and build library and Frontend for development
+        working-directory: ./examples/typescript
+        run: |
+          npm ci
+          npm run build-all-dev
+      
+      # install deps for Frontend and Library for and build both for production
+      - name: Install and build library and Frontend for production
+        working-directory: ./examples/typescript
+        run: |
+          npm ci
+          npm run build-all-prod

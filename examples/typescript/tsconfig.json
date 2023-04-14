@@ -4,13 +4,16 @@
     "noImplicitAny": true,
     "module": "es6",
     "esModuleInterop": true,
-    "target": "ES6",
+    "target": "es5",
     "moduleResolution": "node",
     "sourceMap": false,
     "allowJs": true,
-    "declaration": false,
-    "typeRoots" : ["./node_modules/@types", "./typings"]
+    "declaration": false
   },
-  "lib": ["es2015"],
-  "include": ["./src/*.ts"],
+  "lib": [
+    "es2015"
+  ],
+  "include": [
+    "./src/*.ts"
+  ],
 }
