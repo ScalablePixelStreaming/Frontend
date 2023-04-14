@@ -6,8 +6,8 @@ The SPS frontend is a lightweight implementation of Epic Games' [Pixel Streaming
 
 ## Features of the SPS Frontend
 
-- [Extensions](./src/SignallingExtension.ts) to the default signalling messages to communicate with our custom signalling server.
-- The sending of [streaming statistics](./src/SPSApplication.ts#L38) to our signalling server.
+- [Extensions](./library/src/SignallingExtension.ts) to the default signalling messages to communicate with our custom signalling server.
+- The sending of [streaming statistics](./library/src/SPSApplication.ts#L38) to our signalling server.
 
 ## Documentation
 
