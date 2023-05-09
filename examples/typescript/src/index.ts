@@ -38,7 +38,7 @@ document.body.onload = function () {
 	// Override the onConfig so we can determine if we need to send the WebRTC offer based on the engine version
 	// If the engine version is 4.27 or not defined, the browser should send the offer. This is what the Scalable Pixel Streaming signalling server will be expecting.
 	stream.webSocketController.onConfig = (messageExtendedConfig: MessageExtendedConfig) => {
-		stream.config.setFlagEnabled(Flags.BrowserSendOffer, (messageExtendedConfig.engineVersion == "4.27" || messageExtendedConfig.engineVersion == "5.0" || messageExtendedConfig.engineVersion == ""));
+		stream.config.setFlagEnabled(Flags.BrowserSendOffer, (messageExtendedConfig.engineVersion == "4.27" || messageExtendedConfig.engineVersion == ""));
 		stream.handleOnConfig(messageExtendedConfig);
 	}
 
