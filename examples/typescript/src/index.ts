@@ -10,14 +10,16 @@ declare var WEBSOCKET_URL: string;
 // Extend the MessageRecv to allow the engine version to exist as part of our config message from the signalling server
 class MessageExtendedConfig extends MessageRecv {
 	peerConnectionOptions: RTCConfiguration;
-	engineVersion: string
+	engineVersion: string;
+	platform: string;
+	frontendToSendOffer: boolean;
 };
 
 // Extend PixelStreaming to use our custom extended config that includes the engine version
 class ScalablePixelStreaming extends PixelStreaming {
 	// Create a new method that retains original functionality
 	public handleOnConfig(messageExtendedConfig: MessageExtendedConfig) {
-		this._webRtcController.handleOnConfigMessage(messageExtendedConfig)
+		this._webRtcController.handleOnConfigMessage(messageExtendedConfig);
 	}
 };
 
@@ -29,16 +31,15 @@ document.body.onload = function () {
 	// make usage of WEBSOCKET_URL if it is not empty
 	let webSocketAddress = WEBSOCKET_URL;
 	if (webSocketAddress != "") {
-		config.setTextSetting(TextParameters.SignallingServerUrl, webSocketAddress)
+		config.setTextSetting(TextParameters.SignallingServerUrl, webSocketAddress);
 	}
 
 	// Create stream and spsApplication instances that implement the Epic Games Pixel Streaming Frontend PixelStreaming and Application types
 	const stream = new ScalablePixelStreaming(config);
 
-	// Override the onConfig so we can determine if we need to send the WebRTC offer based on the engine version
-	// If the engine version is 4.27 or not defined, the browser should send the offer. This is what the Scalable Pixel Streaming signalling server will be expecting.
+	// Override the onConfig so we can determine if we need to send the WebRTC offer based on what is sent from the signalling server
 	stream.webSocketController.onConfig = (messageExtendedConfig: MessageExtendedConfig) => {
-		stream.config.setFlagEnabled(Flags.BrowserSendOffer, (messageExtendedConfig.engineVersion == "4.27" || messageExtendedConfig.engineVersion == ""));
+		stream.config.setFlagEnabled(Flags.BrowserSendOffer, messageExtendedConfig.frontendToSendOffer);
 		stream.handleOnConfig(messageExtendedConfig);
 	}
 
