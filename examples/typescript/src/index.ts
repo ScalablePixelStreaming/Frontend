@@ -25,8 +25,8 @@ class ScalablePixelStreaming extends PixelStreaming {
 
 document.body.onload = function () {
 
-	// Create a config object. We default to sending the WebRTC offer from the browser as true
-	const config = new Config({ useUrlParams: true, initialSettings: { OfferToReceive: true, TimeoutIfIdle: true } });
+	// Create a config object. We default to sending the WebRTC offer from the browser as true, TimeoutIfIdle to true, AutoConnect to false and MaxReconnectAttempts to 0
+	const config = new Config({ useUrlParams: true, initialSettings: { OfferToReceive: true, TimeoutIfIdle: true, AutoConnect: false, MaxReconnectAttempts: 0 } });
 
 	// make usage of WEBSOCKET_URL if it is not empty
 	let webSocketAddress = WEBSOCKET_URL;
