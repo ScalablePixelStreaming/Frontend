@@ -1,6 +1,6 @@
 {
   "name": "@tensorworks/libspsfrontend",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "The Scalable Pixel Streaming Frontend Library consuming Epic Games' Pixel Streaming Frontend",
   "main": "dist/libspsfrontend.min.js",
   "module": "dist/libspsfrontend.esm.js",
