@@ -54,12 +54,13 @@ export class SPSApplication extends Application {
 
 	enforceSpecialSignallingServerUrl() {
 		// SPS needs a special /ws added to the signalling server url so K8s can distinguish it
-		this.stream.setSignallingUrlBuilder(()=> {
+		this.stream.setSignallingUrlBuilder(() => {
+
+			// get the current signalling url
 			let signallingUrl = this.stream.config.getTextSettingValue(TextParameters.SignallingServerUrl);
 
-			if (signallingUrl && signallingUrl !== undefined && !signallingUrl.endsWith("/ws")) {
-				signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "ws" : signallingUrl + window.location.pathname + "/ws";
-			}
+			// add our 'ws' token to the end dependant on whether the URL ends with a '/' or not
+			signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "signalling" + window.location.pathname : signallingUrl + "/signalling" + window.location.pathname;
 
 			return signallingUrl
 		});
