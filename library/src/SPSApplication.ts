@@ -4,6 +4,10 @@ import { LoadingOverlay } from './LoadingOverlay';
 import { SPSSignalling } from './SignallingExtension';
 import { MessageStats } from './Messages';
 
+// For local testing. Declare a websocket URL that can be imported via a .env file that will override 
+// the signalling server URL builder.
+declare var WEBSOCKET_URL: string;
+
 
 export class SPSApplication extends Application {
 	private loadingOverlay: LoadingOverlay;
@@ -53,13 +57,18 @@ export class SPSApplication extends Application {
 	}
 
 	enforceSpecialSignallingServerUrl() {
-		// SPS needs a special /ws added to the signalling server url so K8s can distinguish it
+		// SPS needs to build a specific signalling server url based on the application name so K8s can distinguish it
 		this.stream.setSignallingUrlBuilder(() => {
+
+			// if we have overriden the signalling server URL with a .env file use it here
+			if (WEBSOCKET_URL) {
+				return WEBSOCKET_URL as string;
+			}
 
 			// get the current signalling url
 			let signallingUrl = this.stream.config.getTextSettingValue(TextParameters.SignallingServerUrl);
 
-			// add our 'ws' token to the end dependant on whether the URL ends with a '/' or not
+			// build the signalling URL based on the existing window location, the result should be 'domain.com/signalling/app-name'
 			signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "signalling" + window.location.pathname : signallingUrl + "/signalling" + window.location.pathname;
 
 			return signallingUrl
