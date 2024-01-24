@@ -57,7 +57,7 @@ export class SPSApplication extends Application {
 	}
 
 	enforceSpecialSignallingServerUrl() {
-		// SPS needs a special to build a specific signalling server url so K8s can distinguish it
+		// SPS needs to build a specific signalling server url based on the application name so K8s can distinguish it
 		this.stream.setSignallingUrlBuilder(() => {
 
 			// if we have overriden the signalling server URL with a .env file use it here
