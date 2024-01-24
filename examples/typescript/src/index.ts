@@ -4,9 +4,6 @@ import { Config, PixelStreaming, SPSApplication, TextParameters, PixelStreamingA
 export const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
 PixelStreamingApplicationStyles.applyStyleSheet();
 
-// websocket url env
-declare var WEBSOCKET_URL: string;
-
 // Extend the MessageRecv to allow the engine version to exist as part of our config message from the signalling server
 class MessageExtendedConfig extends MessageRecv {
 	peerConnectionOptions: RTCConfiguration;
@@ -27,12 +24,6 @@ document.body.onload = function () {
 
 	// Create a config object. We default to sending the WebRTC offer from the browser as true, TimeoutIfIdle to true, AutoConnect to false and MaxReconnectAttempts to 0
 	const config = new Config({ useUrlParams: true, initialSettings: { OfferToReceive: true, TimeoutIfIdle: true, AutoConnect: false, MaxReconnectAttempts: 0 } });
-
-	// make usage of WEBSOCKET_URL if it is not empty
-	let webSocketAddress = WEBSOCKET_URL;
-	if (webSocketAddress != "") {
-		config.setTextSetting(TextParameters.SignallingServerUrl, webSocketAddress);
-	}
 
 	// Create stream and spsApplication instances that implement the Epic Games Pixel Streaming Frontend PixelStreaming and Application types
 	const stream = new ScalablePixelStreaming(config);
