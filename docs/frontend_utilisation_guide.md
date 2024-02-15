@@ -4,8 +4,8 @@ The Scalable Pixel Streaming Frontend is a library of HTML, CSS and TypeScript c
 
 ## Epic Games Pixel Streaming Frontend and UI Frontend
 For the base functionality for Pixel Streaming and its UI capabilities the Scalable Pixel Streaming Frontend consumes the Epic Games Pixel Streaming Frontend and UI Frontend:
-- [Pixel Streaming Frontend](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.2)
-- [Pixel Streaming Frontend UI](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.2)
+- [Pixel Streaming Frontend](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.4)
+- [Pixel Streaming Frontend UI](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4)
 
 ### Pixel Streaming Frontend 
 The Pixel Streaming Frontend contains all the base functionality: 

@@ -7,7 +7,7 @@ import {
 	InboundVideoStats,
 	MessageSend,
 	OutBoundVideoStats
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.2';
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
 
 export enum MessageSendTypes {
 	STATS = "stats",
