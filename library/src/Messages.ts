@@ -19,7 +19,7 @@ export enum MessageSendTypes {
 export class MessageStats extends MessageSend {
 	inboundVideoStats: InboundVideoStats;
 	inboundAudioStats: InboundAudioStats;
-	candidatePair: CandidatePairStats
+	candidatePair: CandidatePairStats;
 	dataChannelStats: DataChannelStats;
 	localCandidates: Array<CandidateStat>;
 	remoteCandidates: Array<CandidateStat>;
@@ -33,7 +33,7 @@ export class MessageStats extends MessageSend {
 		this.type = MessageSendTypes.STATS
 		this.inboundVideoStats = aggregatedStats.inboundVideoStats;
 		this.inboundAudioStats = aggregatedStats.inboundAudioStats;
-		this.candidatePair = aggregatedStats.candidatePair;
+		this.candidatePair = aggregatedStats.getActiveCandidatePair();
 		this.dataChannelStats = aggregatedStats.DataChannelStats
 		this.localCandidates = aggregatedStats.localCandidates;
 		this.remoteCandidates = aggregatedStats.remoteCandidates;
