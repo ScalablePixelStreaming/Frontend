@@ -49,7 +49,7 @@ export class WebRtcTcpRelayDetectIndicator {
         if (!this._warningTextElement) {
             this._warningTextElement = document.createElement('div');
             this._warningTextElement.id = 'warningTCPStream';
-            this._warningTextElement.innerHTML = `<p>Your network is blocking UDP.</br >Expect degraded streaming (<a href="https://tensorworks.com.au/blog/placeholder" target="_blank">details</a>).</p>`
+            this._warningTextElement.innerHTML = `<p>Your network is blocking UDP.</br >Expect degraded streaming.</p>`
         }
         return this._warningTextElement;
     }
