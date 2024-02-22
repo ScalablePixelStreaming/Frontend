@@ -3,4 +3,4 @@ node_modules/
 types/
 .vscode
 !.env.example
-.env
+*.env
