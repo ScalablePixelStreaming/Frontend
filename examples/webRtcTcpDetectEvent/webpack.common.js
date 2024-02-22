@@ -8,9 +8,6 @@ module.exports = {
         index: './src/index.ts',
     },
     plugins: [
-        new webpack.DefinePlugin({
-            WEBSOCKET_URL: JSON.stringify((process.env.WEBSOCKET_URL !== undefined) ? process.env.WEBSOCKET_URL : '')
-        }),
         new HtmlWebpackPlugin({
             title: 'Scalable Pixel Streaming Frontend',
             template: './src/index.html',
