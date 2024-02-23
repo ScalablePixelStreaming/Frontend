@@ -61,7 +61,7 @@ export class SPSApplication extends Application {
 		this.stream.setSignallingUrlBuilder(() => {
 
 			// if we have overriden the signalling server URL with a .env file use it here
-			if (WEBSOCKET_URL !== undefined) {
+			if (WEBSOCKET_URL != "") {
 				return WEBSOCKET_URL as string;
 			}
 
