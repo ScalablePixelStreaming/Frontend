@@ -1,16 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
-require('dotenv').config({ path: './.env' }); 
+require('dotenv').config({ path: './.env' });
 
 module.exports = {
     entry: {
         index: './src/index.ts',
     },
     plugins: [
-        new webpack.DefinePlugin({
-            WEBSOCKET_URL: JSON.stringify((process.env.WEBSOCKET_URL !== undefined) ? process.env.WEBSOCKET_URL : '')
-        }),
         new HtmlWebpackPlugin({
             title: 'Scalable Pixel Streaming Frontend',
             template: './src/index.html',
