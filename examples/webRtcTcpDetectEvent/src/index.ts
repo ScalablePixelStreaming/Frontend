@@ -43,16 +43,20 @@ document.body.onload = function () {
 	});
 	document.body.appendChild(spsApplication.rootElement);
 
+	// Create an instance to the WebRtcTcoRelayDetectIndicator
 	let webRtcTcpRelayIndicator = new WebRtcTcpRelayDetectIndicator();
 	
+	// Handle when then webRtcTCPRelayDetected has been raised
 	stream.addEventListener('webRtcTCPRelayDetected', (event: WebRtcTCPRelayDetectedEvent) => {
+		// Show the web rtc tpc relay warning message
 		webRtcTcpRelayIndicator.ShowWarning()
 	});
 	
+	// Handle when the webRtcDisconnected event has been raised
 	stream.addEventListener('webRtcDisconnected', (event: WebRtcDisconnectedEvent) => {
+		// Remove the web rtc tpc relay warning message
 		webRtcTcpRelayIndicator.RemoveWarning()
 	});
-
 
 }
 
