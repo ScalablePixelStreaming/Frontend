@@ -48,7 +48,7 @@ module.exports = {
     },
     output: {
         filename: '[name].js',
-        library: 'spstypescriptexample',
+        library: 'spstypescriptwebrtctcpdetectevebtexample',
         libraryTarget: 'umd',
         path: path.resolve(__dirname, 'dist'),
         clean: true,
