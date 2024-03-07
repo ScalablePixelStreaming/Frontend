@@ -1,17 +1,20 @@
 import { Application, SettingUIFlag, UIOptions } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4';
-import { AggregatedStats, SettingFlag, TextParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
+import { AggregatedStats, SettingFlag, TextParameters, Logger } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
 import { LoadingOverlay } from './LoadingOverlay';
 import { SPSSignalling } from './SignallingExtension';
 import { MessageStats } from './Messages';
+import { v4 as uuidv4 } from 'uuid';
 
 // For local testing. Declare a websocket URL that can be imported via a .env file that will override 
 // the signalling server URL builder.
 declare var WEBSOCKET_URL: string;
 
-
 export class SPSApplication extends Application {
 	private loadingOverlay: LoadingOverlay;
 	private signallingExtension: SPSSignalling;
+    private statsTimer: ReturnType<typeof setInterval> | undefined;
+    private sessionData: any;
+    private loadingStart: number | undefined;
 
 	static Flags = class {
 		static sendToServer = "sendStatsToServer"
@@ -41,12 +44,77 @@ export class SPSApplication extends Application {
 		this.stream.addEventListener(
 			'statsReceived',
 			({ data: { aggregatedStats } }) => {
+                this.onSessionStats(aggregatedStats);
 				if (sendStatsToServerSetting.flag) {
 					this.sendStatsToSignallingServer(aggregatedStats);
 				}
 			}
 		);
+
+        this.stream.addEventListener('webRtcConnected', () => this.startSession() );
 	}
+
+    startSession() {
+        // generate a unique session id
+        const sessionId: string = uuidv4();
+
+        // register end of session event
+        window.addEventListener('beforeunload', () => this.endSession(sessionId));
+
+        // collect some session data
+        this.sessionData = {};
+        this.sessionData.startTime = Date.now();
+        this.sessionData.userAgent = navigator.userAgent;
+
+        if (this.loadingStart) {
+            this.sessionData.loadingDuration = this.sessionData.startTime - this.loadingStart;
+            this.loadingStart = undefined;
+        }
+
+        // stop the stats polling if it exists for some reason
+        if (this.statsTimer) {
+            clearInterval(this.statsTimer);
+        }
+    }
+
+    onSessionStats(aggregatedStats: AggregatedStats) {
+        // if sessionData is defined we can assume the session is active
+        if (this.sessionData) {
+            let stats : any = {};
+            stats.video = {};
+            if (aggregatedStats.inboundVideoStats) {
+                const videoStats = aggregatedStats.inboundVideoStats;
+                stats.video.resolution = { width: videoStats.frameWidth, height: videoStats.frameHeight };
+                stats.video.bitrate = videoStats.bitrate;
+                stats.video.dropped = videoStats.framesDropped;
+                stats.video.packets_lost = videoStats.packetsLost;
+                // rtt?
+                stats.video.fps = videoStats.framesPerSecond;
+                stats.video.pli_count = videoStats.pliCount;
+                stats.keyframes = videoStats.keyFramesDecoded;
+                stats.nack_count = videoStats.nackCount;
+                stats.freeze_count = videoStats.freezeCount;
+                stats.jitter = videoStats.jitter;
+                stats.video.frame_count = videoStats.framesReceived;
+            }
+            stats.audio = {};
+            if (aggregatedStats.inboundAudioStats) {
+                const audioStats = aggregatedStats.inboundAudioStats;
+                stats.audio.bitrate = audioStats.bitrate;
+            }
+        }
+    }
+
+    endSession(sessionId: string) {
+        // record end time
+        this.sessionData.endTime = Date.now();
+        this.sessionData.duration = this.sessionData.endTime - this.sessionData.startTime;
+
+        // send session data
+        
+        // clear session stats which also indicates no session
+        this.sessionData = undefined;
+    }
 
 	handleSignallingResponse(signallingResp: string, isError: boolean) {
 		if (isError) {
@@ -84,6 +152,11 @@ export class SPSApplication extends Application {
 		// this.loadingOverlay.animate();
 
 		this.currentOverlay = this.loadingOverlay;
+
+        // only record the first call to loading.
+        if (!this.loadingStart) {
+            this.loadingStart = Date.now();
+        }
 	}
 
 	/**
