@@ -9,6 +9,22 @@ import { v4 as uuidv4 } from 'uuid';
 // the signalling server URL builder.
 declare var WEBSOCKET_URL: string;
 
+const SupportedStats : Record<string, string> = {
+    'video_width': 'width',
+    'video_height': 'height',
+    'video_bitrate': 'bitrate',
+    'video_dropped': 'dropped',
+    'video_packets_lost': 'packets lost',
+    'video_fps': 'fps',
+    'video_pli_count': 'count',
+    'video_keyframes': 'keyframes',
+    'video_nack_count': 'nacks',
+    'video_freeze_count': 'freeze',
+    'video_jitter': 'jitter',
+    'video_frame_count': 'frame count',
+    'audio_bitrate': 'audio bitrate'
+}
+
 export class SPSApplication extends Application {
 	private loadingOverlay: LoadingOverlay;
 	private signallingExtension: SPSSignalling;
@@ -63,6 +79,7 @@ export class SPSApplication extends Application {
 
         // collect some session data
         this.sessionData = {};
+        this.sessionData.id = sessionId;
         this.sessionData.startTime = Date.now();
         this.sessionData.userAgent = navigator.userAgent;
 
@@ -77,31 +94,86 @@ export class SPSApplication extends Application {
         }
     }
 
+    updateStatValue(name: string, value: number) {
+        if (value == null) {
+            return;
+        }
+
+        const statDescription = SupportedStats[name];
+        if (!statDescription) {
+            console.log(`unknown stat ${name}`);
+            return;
+        }
+
+        if (!this.sessionData) {
+            console.log(`no sessiondata`);
+            return;
+        }
+
+        if (!this.sessionData.stats) {
+            this.sessionData.stats = {};
+        }
+
+        if (this.sessionData.stats[name]) {
+            this.sessionData.stats[name].value = value;
+        } else {
+            this.sessionData.stats[name] = {
+                description: statDescription,
+                value: value
+            };
+        }
+    }
+
     onSessionStats(aggregatedStats: AggregatedStats) {
         // if sessionData is defined we can assume the session is active
-        if (this.sessionData) {
-            let stats : any = {};
-            stats.video = {};
-            if (aggregatedStats.inboundVideoStats) {
-                const videoStats = aggregatedStats.inboundVideoStats;
-                stats.video.resolution = { width: videoStats.frameWidth, height: videoStats.frameHeight };
-                stats.video.bitrate = videoStats.bitrate;
-                stats.video.dropped = videoStats.framesDropped;
-                stats.video.packets_lost = videoStats.packetsLost;
-                // rtt?
-                stats.video.fps = videoStats.framesPerSecond;
-                stats.video.pli_count = videoStats.pliCount;
-                stats.keyframes = videoStats.keyFramesDecoded;
-                stats.nack_count = videoStats.nackCount;
-                stats.freeze_count = videoStats.freezeCount;
-                stats.jitter = videoStats.jitter;
-                stats.video.frame_count = videoStats.framesReceived;
+        if (aggregatedStats.inboundVideoStats) {
+            const videoStats = aggregatedStats.inboundVideoStats;
+            this.updateStatValue("video_width", videoStats.frameWidth);
+            this.updateStatValue("video_height", videoStats.frameHeight);
+            this.updateStatValue("video_bitrate", videoStats.bitrate);
+            this.updateStatValue("video_dropped", videoStats.framesDropped);
+            this.updateStatValue("video_packets_lost", videoStats.packetsLost);
+            // rtt?
+            this.updateStatValue("video_fps", videoStats.framesPerSecond);
+            this.updateStatValue("video_pli_count", videoStats.pliCount);
+            this.updateStatValue("video_keyframes", videoStats.keyFramesDecoded);
+            this.updateStatValue("video_nack_count", videoStats.nackCount);
+            this.updateStatValue("video_freeze_count", videoStats.freezeCount);
+            this.updateStatValue("video_jitter", videoStats.jitter);
+            this.updateStatValue("video_frame_count", videoStats.framesReceived);
+        }
+        if (aggregatedStats.inboundAudioStats) {
+            const audioStats = aggregatedStats.inboundAudioStats;
+            this.updateStatValue("audio_bitrate", audioStats.bitrate);
+        }
+
+        // POST the stats
+        this.httpPost(this.sessionData.stats);
+    }
+
+    async httpPost(data: any) {
+        for (const prop in data) {
+            if (typeof data[prop] === 'number') {
+                data[prop] = data[prop].toString();
             }
-            stats.audio = {};
-            if (aggregatedStats.inboundAudioStats) {
-                const audioStats = aggregatedStats.inboundAudioStats;
-                stats.audio.bitrate = audioStats.bitrate;
-            }
+        }
+        const post_data = {
+            id: this.sessionData.id,
+            metrics: data
+        };
+
+        const data_string = JSON.stringify(post_data);
+        console.log(`Sending: \n${data_string}`);
+
+        const response = await fetch('http://localhost:8000/stats', {
+            method: 'POST',
+            body: data_string,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+        });
+
+        if (response.body !== null) {
+            //const as_string = new TextDecoder('utf-8').decode(response.body);
+            //console.log(as_string);
         }
     }
 

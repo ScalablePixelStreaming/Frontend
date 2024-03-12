@@ -15,7 +15,8 @@
   "license": "MIT",
   "dependencies": {
     "@epicgames-ps/lib-pixelstreamingfrontend-ue5.4": "^0.0.4",
-    "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4": "^0.0.4"
+    "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4": "^0.0.4",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/uuid": "^9.0.8",
