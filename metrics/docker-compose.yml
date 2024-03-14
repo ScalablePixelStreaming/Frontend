@@ -1,12 +1,12 @@
 
 services:
   frontend:
-    image: "sps-frontend-example"
+    image: "mcottontensor/sps-frontend-metrics"
     container_name: frontend
     network_mode: "host"
 
   buccaneerserver:
-    image: "tensorworks/buccaneerdemo-buccaneerserver"
+    image: "mcottontensor/sps-buccaneer-metrics"
     container_name: buccaneerserver
     network_mode: "host"
 

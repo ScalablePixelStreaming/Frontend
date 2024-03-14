@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:lts-slim
 
 COPY /library /library
 COPY /examples/typescript /www
@@ -10,9 +10,6 @@ RUN npm run build-dev
 WORKDIR /www
 RUN npm ci
 RUN npm link /library
-
-#RUN rm /etc/nginx/nginx.conf
-#RUN ln -s /etc/nginx/sps/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 8080
 

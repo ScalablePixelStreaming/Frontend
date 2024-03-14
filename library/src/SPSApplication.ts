@@ -165,17 +165,13 @@ export class SPSApplication extends Application {
         }
         const post_data = {
             id: this.sessionData.id,
-            metrics: data,
-            metadata: {}
+            metrics: data
         };
-
-        const data_string = JSON.stringify(post_data);
-        console.log(`Sending: \n${data_string}`);
 
         const response = await fetch(`http://${window.location.hostname}:8000/stats`, {
             method: 'POST',
             mode: "no-cors",
-            body: data_string,
+            body: JSON.stringify(post_data),
             headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         });
 
