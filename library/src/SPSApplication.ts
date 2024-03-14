@@ -125,6 +125,12 @@ export class SPSApplication extends Application {
     }
 
     onSessionStats(aggregatedStats: AggregatedStats) {
+        if (!this.sessionData) {
+            return;
+        }
+
+        this.sessionData.lastSent = Date.now();
+
         // if sessionData is defined we can assume the session is active
         if (aggregatedStats.inboundVideoStats) {
             const videoStats = aggregatedStats.inboundVideoStats;
@@ -159,14 +165,16 @@ export class SPSApplication extends Application {
         }
         const post_data = {
             id: this.sessionData.id,
-            metrics: data
+            metrics: data,
+            metadata: {}
         };
 
         const data_string = JSON.stringify(post_data);
         console.log(`Sending: \n${data_string}`);
 
-        const response = await fetch('http://localhost:8000/stats', {
+        const response = await fetch(`http://${window.location.hostname}:8000/stats`, {
             method: 'POST',
+            mode: "no-cors",
             body: data_string,
             headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         });
