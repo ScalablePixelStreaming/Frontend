@@ -8,11 +8,12 @@ import { MetricsReporter } from './MetricsReporter';
 // For local testing. Declare a websocket URL that can be imported via a .env file that will override 
 // the signalling server URL builder.
 declare var WEBSOCKET_URL: string;
+declare var ENABLE_METRICS: boolean;
 
 export class SPSApplication extends Application {
 	private loadingOverlay: LoadingOverlay;
 	private signallingExtension: SPSSignalling;
-	private metricsReporter: MetricsReporter;
+	private metrics_reporter: MetricsReporter;
 
 	static Flags = class {
 		static sendToServer = "sendStatsToServer"
@@ -39,18 +40,25 @@ export class SPSApplication extends Application {
 		spsSettingsSection.appendChild(new SettingUIFlag(sendStatsToServerSetting).rootElement);
 		this.loadingOverlay = new LoadingOverlay(this.stream.videoElementParent);
 
-		this.metricsReporter = new MetricsReporter();
+		if (ENABLE_METRICS) {
+			this.metrics_reporter = new MetricsReporter();
+			// register the event when the stream starts.
+			this.stream.addEventListener('webRtcConnected', () => this.metrics_reporter.startSession() );
+			// register the event when the browser closes or navigates away.
+			window.addEventListener('beforeunload', () => this.metrics_reporter.endSession());
+			// register the event when the remote session ends.
+			this.stream.addEventListener('webRtcDisconnected', () => this.metrics_reporter.endSession());
+		}
+
 		this.stream.addEventListener(
 			'statsReceived',
 			({ data: { aggregatedStats } }) => {
-				this.metricsReporter.onSessionStats(aggregatedStats);
+				this.metrics_reporter?.onSessionStats(aggregatedStats);
 				if (sendStatsToServerSetting.flag) {
 					this.sendStatsToSignallingServer(aggregatedStats);
 				}
 			}
 		);
-
-		this.stream.addEventListener('webRtcConnected', () => this.metricsReporter.startSession() );
 	}
 
 
@@ -91,7 +99,7 @@ export class SPSApplication extends Application {
 
 		this.currentOverlay = this.loadingOverlay;
 
-		this.metricsReporter.startLoading();
+		this.metrics_reporter?.startLoading();
 	}
 
 	/**

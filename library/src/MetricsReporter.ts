@@ -1,7 +1,6 @@
 import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
 import { v4 as uuidv4 } from 'uuid';
 
-declare var ENABLE_METRICS: boolean;
 declare var METRICS_URL: string;
 
 const SupportedStats : Record<string, string> = {
@@ -18,73 +17,56 @@ const SupportedStats : Record<string, string> = {
 	'video_jitter': 'Video stream jitter.',
 	'video_frame_count': 'Video stream frame count.',
 	'audio_bitrate': 'Audio stream bitrate in bits per second.',
-    'loading_time': 'Stream loading time in milliseconds.'
+    'loading_time': 'Stream loading time in milliseconds.',
+	'session_duration': 'Stream duration in milliseconds.'
 }
 
 export class MetricsReporter {
-	private sessionData: any;
-	private loadingStart: number | null;
+	private metrics: any;
+	private session_id: string | undefined;
+	private user_agent: string | undefined;
+	private loading_start: number | undefined;
+	private start_time: number | undefined;
 
 	constructor() {
-		this.sessionData = {};
-		this.loadingStart = null;
+		this.metrics = {};
 	}
 
 	startLoading() {
-		if (!this.loadingStart) {
-			this.loadingStart = Date.now();
+		if (!this.loading_start) {
+			this.loading_start = Date.now();
 		}
 	}
 
 	startSession() {
-		if (!ENABLE_METRICS) {
-			return;
-		}
-
-		// generate a unique session id
-		const sessionId: string = uuidv4();
-
-		// register end of session event
-		window.addEventListener('beforeunload', () => this.endSession(sessionId));
-
 		// collect some session data
-		this.sessionData = {};
-		this.sessionData.id = sessionId;
-		this.sessionData.startTime = Date.now();
-		this.sessionData.userAgent = navigator.userAgent;
+		this.session_id = uuidv4();
+		this.user_agent = navigator.userAgent;
+		this.start_time = Date.now();
 
-		if (this.loadingStart) {
-			this.sessionData.loadingDuration = this.sessionData.startTime - this.loadingStart;
-			this.loadingStart = null;
-			this.updateStatValue("loading_time", this.sessionData.loadingDuration);
+		if (this.loading_start) {
+			const loading_duration = this.start_time - this.loading_start;
+			this.updateStatValue("loading_time", loading_duration);
+			this.loading_start = undefined;
 		}
 	}
 
-	endSession(sessionId: string) {
-		if (!ENABLE_METRICS) {
-			return;
-		}
-
+	endSession() {
 		// record end time
-		this.sessionData.endTime = Date.now();
-		this.sessionData.duration = this.sessionData.endTime - this.sessionData.startTime;
+		const session_duration = Date.now() - this.start_time;
+		this.updateStatValue("session_duration", session_duration);
 
 		// send session data
+		this.httpPost(this.metrics);
 		
-		// clear session stats which also indicates no session
-		this.sessionData = undefined;
+		// clear session id which also indicates no session
+		this.session_id = undefined;
 	}
 
 	onSessionStats(aggregatedStats: AggregatedStats) {
-		if (!ENABLE_METRICS) {
+		if (!this.session_id) {
 			return;
 		}
-
-		if (!this.sessionData) {
-			return;
-		}
-
-		this.sessionData.lastSent = Date.now();
 
 		// if sessionData is defined we can assume the session is active
 		if (aggregatedStats.inboundVideoStats) {
@@ -109,14 +91,10 @@ export class MetricsReporter {
 		}
 
 		// POST the stats
-		this.httpPost(this.sessionData.stats);
+		this.httpPost(this.metrics);
 	}
 
 	private updateStatValue(name: string, value: number) {
-		if (!ENABLE_METRICS) {
-			return;
-		}
-
 		if (value == null) {
 			return;
 		}
@@ -127,19 +105,10 @@ export class MetricsReporter {
 			return;
 		}
 
-		if (!this.sessionData) {
-			console.log(`no sessiondata`);
-			return;
-		}
-
-		if (!this.sessionData.stats) {
-			this.sessionData.stats = {};
-		}
-
-		if (this.sessionData.stats[name]) {
-			this.sessionData.stats[name].value = value;
+		if (this.metrics[name]) {
+			this.metrics[name].value = value;
 		} else {
-			this.sessionData.stats[name] = {
+			this.metrics[name] = {
 				description: statDescription,
 				value: value
 			};
@@ -149,7 +118,7 @@ export class MetricsReporter {
 
 	private async httpPost(data: any) {
 		const post_data = {
-			id: this.sessionData.id,
+			id: this.session_id,
 			metrics: data
 		};
 
