@@ -17,7 +17,7 @@ const SupportedStats : Record<string, string> = {
 	'video_jitter': 'Video stream jitter.',
 	'video_frame_count': 'Video stream frame count.',
 	'audio_bitrate': 'Audio stream bitrate in bits per second.',
-    'loading_time': 'Stream loading time in milliseconds.',
+	'loading_time': 'Stream loading time in milliseconds.',
 	'session_duration': 'Stream duration in milliseconds.'
 }
 
