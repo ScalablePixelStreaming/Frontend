@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 // For local testing. Declare a websocket URL that can be imported via a .env file that will override 
 // the signalling server URL builder.
 declare var WEBSOCKET_URL: string;
+declare var ENABLE_METRICS: boolean;
 
 const SupportedStats : Record<string, string> = {
     'video_width': 'width',
@@ -71,6 +72,10 @@ export class SPSApplication extends Application {
 	}
 
     startSession() {
+        if (!ENABLE_METRICS) {
+            return;
+        }
+
         // generate a unique session id
         const sessionId: string = uuidv4();
 
@@ -95,6 +100,10 @@ export class SPSApplication extends Application {
     }
 
     updateStatValue(name: string, value: number) {
+        if (!ENABLE_METRICS) {
+            return;
+        }
+
         if (value == null) {
             return;
         }
@@ -125,6 +134,10 @@ export class SPSApplication extends Application {
     }
 
     onSessionStats(aggregatedStats: AggregatedStats) {
+        if (!ENABLE_METRICS) {
+            return;
+        }
+
         if (!this.sessionData) {
             return;
         }
@@ -182,6 +195,10 @@ export class SPSApplication extends Application {
     }
 
     endSession(sessionId: string) {
+        if (!ENABLE_METRICS) {
+            return;
+        }
+
         // record end time
         this.sessionData.endTime = Date.now();
         this.sessionData.duration = this.sessionData.endTime - this.sessionData.startTime;
