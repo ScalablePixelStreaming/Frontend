@@ -1,35 +1,46 @@
 import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
 import { v4 as uuidv4 } from 'uuid';
 
-declare var METRICS_URL: string;
+declare var BUCCANEER_URL: string;
 
-const SupportedStats : Record<string, string> = {
-	'video_width': 'Stream resolution width in pixels.',
-	'video_height': 'Stream resolution height in pixels.',
-	'video_bitrate': 'Stream video bitrate in bits per second.',
-	'video_dropped': 'Video stream frames dropped.',
-	'video_packets_lost': 'Video stream packets lost',
-	'video_fps': 'Video stream frames per second.',
-	'video_pli_count': 'Picture Loss Indication count.',
-	'video_keyframes': 'Video stream keyframes.',
-	'video_nack_count': 'Video stream negative acknowledgements.',
-	'video_freeze_count': 'Video stream freeze count.',
-	'video_jitter': 'Video stream jitter.',
-	'video_frame_count': 'Video stream frame count.',
-	'audio_bitrate': 'Audio stream bitrate in bits per second.',
-	'loading_time': 'Stream loading time in milliseconds.',
-	'session_duration': 'Stream duration in milliseconds.'
+enum StatOperation {
+	Reset = 1,
+	Add,
+	Average
+}
+
+interface StatOptions {
+	operation: StatOperation;
+}
+
+const SupportedStats : Record<string, StatOptions> = {
+	'video_width': { operation: StatOperation.Reset },
+	'video_height': { operation: StatOperation.Reset },
+	'video_bitrate': { operation: StatOperation.Average },
+	'video_dropped': { operation: StatOperation.Reset },
+	'video_packets_lost': { operation: StatOperation.Reset },
+	'video_fps': { operation: StatOperation.Average },
+	'video_pli_count': { operation: StatOperation.Reset },
+	'video_keyframes': { operation: StatOperation.Reset },
+	'video_nack_count': { operation: StatOperation.Reset },
+	'video_freeze_count': { operation: StatOperation.Reset },
+	'video_jitter': { operation: StatOperation.Average },
+	'video_frame_count': { operation: StatOperation.Reset },
+	'audio_bitrate': { operation: StatOperation.Average },
+	'loading_duration': { operation: StatOperation.Reset },
+	'session_duration': { operation: StatOperation.Reset }
 }
 
 export class MetricsReporter {
-	private metrics: any;
+	private statValues: any;
 	private session_id: string | undefined;
 	private user_agent: string | undefined;
 	private loading_start: number | undefined;
 	private start_time: number | undefined;
+	private disconnect_reason: string | undefined;
 
 	constructor() {
-		this.metrics = {};
+		this.statValues = {};
 	}
 
 	startLoading() {
@@ -44,21 +55,25 @@ export class MetricsReporter {
 		this.user_agent = navigator.userAgent;
 		this.start_time = Date.now();
 
-		if (this.loading_start) {
-			const loading_duration = this.start_time - this.loading_start;
-			this.updateStatValue("loading_time", loading_duration);
-			this.loading_start = undefined;
-		}
+		const loading_duration = this.start_time - (this.loading_start || this.start_time);
+		this.updateStatValue("loading_duration", loading_duration);
+		this.loading_start = undefined;
 	}
 
-	endSession() {
+	endSession(reason: string) {
+		if (!this.session_id) {
+			return;
+		}
+
 		// record end time
 		const session_duration = Date.now() - this.start_time;
 		this.updateStatValue("session_duration", session_duration);
 
-		// send session data
-		this.httpPost(this.metrics);
-		
+		// record end reason
+		this.disconnect_reason = reason;
+
+		this.postSessionData();
+
 		// clear session id which also indicates no session
 		this.session_id = undefined;
 	}
@@ -89,9 +104,6 @@ export class MetricsReporter {
 			const audioStats = aggregatedStats.inboundAudioStats;
 			this.updateStatValue("audio_bitrate", audioStats.bitrate);
 		}
-
-		// POST the stats
-		this.httpPost(this.metrics);
 	}
 
 	private updateStatValue(name: string, value: number) {
@@ -99,39 +111,43 @@ export class MetricsReporter {
 			return;
 		}
 
-		const statDescription = SupportedStats[name];
-		if (!statDescription) {
-			console.log(`unknown stat ${name}`);
+		const statOptions = SupportedStats[name];
+		if (!statOptions) {
+			console.log(`Unknown stat ${name}`);
 			return;
 		}
 
-		if (this.metrics[name]) {
-			this.metrics[name].value = value;
+		if (statOptions.operation == StatOperation.Average) {
+			// Calculate EMA
+			if (this.statValues[name]) {
+				const K = 2.0; // Smoothing factor. Might want to make this per stat or something
+				const P = this.statValues[name];
+				const C = value;
+				this.statValues[name] = (K * (C - P)) + P;
+			} else {
+				this.statValues[name] = value;
+			}
+		} else if (statOptions.operation == StatOperation.Add) {
+			this.statValues[name] += value;
 		} else {
-			this.metrics[name] = {
-				description: statDescription,
-				value: value
-			};
+			this.statValues[name] = value;
 		}
 	}
 
-
-	private async httpPost(data: any) {
-		const post_data = {
+	private postSessionData() {
+		const session_data = {
 			id: this.session_id,
-			metrics: data
-		};
+			user_agent: this.user_agent,
+			disconnect_reason: this.disconnect_reason,
+			stat_values: this.statValues
+		}
 
-		const metrics_url = METRICS_URL || `http://${window.location.hostname}:8000/stats`;
+		const events_url = `http://${BUCCANEER_URL || window.location.hostname}:8000/event`;
 		try {
-			const response = await fetch(metrics_url, {
-				method: 'POST',
-				mode: "no-cors",
-				body: JSON.stringify(post_data),
-				headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
-			});
+			const blob = new Blob([JSON.stringify(session_data)], { type: 'application/json; charset=UTF-8' });
+			navigator.sendBeacon(events_url, blob);
 		} catch (error) {
-			console.error(`Unable to POST stats to ${metrics_url}: ${error}`);
+			console.error(`Unable to POST session data to ${events_url}: ${error}`);
 		}
 	}
 }

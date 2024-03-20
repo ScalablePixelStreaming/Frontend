@@ -1,14 +1,18 @@
 
 services:
   frontend:
+    # sps docker image wth metrics changes
     image: "mcottontensor/sps-frontend-metrics"
     container_name: frontend
     network_mode: "host"
 
   buccaneerserver:
-    image: "mcottontensor/sps-buccaneer-metrics"
+    # https://github.com/mcottontensor/Buccaneer/tree/sps_metrics
+    image: "mcottontensor/sps-buccaneerserver"
     container_name: buccaneerserver
     network_mode: "host"
+    volumes:
+      - "./server:/app"
 
   prometheus:
     image: "prom/prometheus"
@@ -40,7 +44,7 @@ services:
     network_mode: "host"
     volumes:
     - "./promtail-local-config.yaml:/etc/promtail/promtail-local-config.yaml"
-    - "eventslogs:/EventsServer"
+    - "./server:/EventsServer"
 
 volumes:
   eventslogs:

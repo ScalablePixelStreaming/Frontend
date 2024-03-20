@@ -10,7 +10,7 @@ module.exports = merge(common, {
         new webpack.DefinePlugin({
             WEBSOCKET_URL: JSON.stringify((process.env.WEBSOCKET_URL !== undefined) ? process.env.WEBSOCKET_URL : undefined),
             ENABLE_METRICS: (process.env.ENABLE_METRICS !== undefined) ? process.env.ENABLE_METRICS : false,
-            METRICS_URL: JSON.stringify((process.env.METRICS_URL !== undefined) ? process.env.METRICS_URL : undefined)
+            BUCCANEER_URL: JSON.stringify((process.env.BUCCANEER_URL !== undefined) ? process.env.BUCCANEER_URL : undefined)
         }),
     ]
 });
