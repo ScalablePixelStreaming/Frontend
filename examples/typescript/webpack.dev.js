@@ -8,7 +8,9 @@ module.exports = merge(common, {
     devtool: 'source-map',
     plugins: [
         new webpack.DefinePlugin({
-            WEBSOCKET_URL: JSON.stringify((process.env.WEBSOCKET_URL !== undefined) ? process.env.WEBSOCKET_URL : undefined)
+            WEBSOCKET_URL: JSON.stringify((process.env.WEBSOCKET_URL !== undefined) ? process.env.WEBSOCKET_URL : undefined),
+            ENABLE_METRICS: (process.env.ENABLE_METRICS !== undefined) ? process.env.ENABLE_METRICS : false,
+            BUCCANEER_URL: JSON.stringify((process.env.BUCCANEER_URL !== undefined) ? process.env.BUCCANEER_URL : undefined)
         }),
     ]
 });

@@ -1,0 +1,50 @@
+
+services:
+  frontend:
+    # sps docker image wth metrics changes from metrics/Dockerfile
+    image: "mcottontensor/sps-frontend-metrics"
+    container_name: frontend
+    network_mode: "host"
+
+  buccaneerserver:
+    # https://github.com/mcottontensor/Buccaneer/tree/sps_metrics
+    image: "mcottontensor/sps-buccaneerserver"
+    container_name: buccaneerserver
+    network_mode: "host"
+    volumes:
+      - "./server:/app"
+
+  prometheus:
+    image: "prom/prometheus"
+    container_name: prometheus
+    network_mode: "host"
+    volumes:
+    - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    network_mode: "host"
+    volumes:
+    - "./grafana-dashboard-config.yaml:/etc/grafana/provisioning/dashboards/grafana-dashboard-config.yaml"
+    - "./grafana-datasource-config.yaml:/etc/grafana/provisioning/datasources/grafana-datasource-config.yaml"
+    - "./Dashboards/:/etc/dashboards"
+
+  loki:
+    image: grafana/loki
+    container_name: loki
+    network_mode: "host"
+    volumes:
+    - "./loki-local-config.yaml:/etc/loki/loki-local-config.yaml"
+
+  promtail:
+    image: grafana/promtail
+    container_name: promtail
+    command: -config.file=/etc/promtail/promtail-local-config.yaml
+    network_mode: "host"
+    volumes:
+    - "./promtail-local-config.yaml:/etc/promtail/promtail-local-config.yaml"
+    - "./server:/EventsServer"
+
+volumes:
+  eventslogs:
