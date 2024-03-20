@@ -1,7 +1,7 @@
 
 services:
   frontend:
-    # sps docker image wth metrics changes
+    # sps docker image wth metrics changes from metrics/Dockerfile
     image: "mcottontensor/sps-frontend-metrics"
     container_name: frontend
     network_mode: "host"
