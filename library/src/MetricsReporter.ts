@@ -33,6 +33,7 @@ const SupportedStats : Record<string, StatOptions> = {
 
 export class MetricsReporter {
 	private statValues: any;
+	private ema_samples: any;
 	private session_id: string | undefined;
 	private user_agent: string | undefined;
 	private loading_start: number | undefined;
@@ -41,6 +42,7 @@ export class MetricsReporter {
 
 	constructor() {
 		this.statValues = {};
+        this.ema_samples = {};
 	}
 
 	startLoading() {
@@ -106,6 +108,16 @@ export class MetricsReporter {
 		}
 	}
 
+    private calcMA(prev_value: number, num_samples: number, new_value: number): number {
+        const result = num_samples * prev_value + new_value;
+        return result / (num_samples + 1.0);
+    }
+
+    private calcEMA(prev_value: number, num_samples: number, new_value: number): number {
+        const K = 2 / (num_samples + 1);
+        return (new_value - prev_value) * K + prev_value;
+    }
+
 	private updateStatValue(name: string, value: number) {
 		if (value == null) {
 			return;
@@ -120,12 +132,17 @@ export class MetricsReporter {
 		if (statOptions.operation == StatOperation.Average) {
 			// Calculate EMA
 			if (this.statValues[name]) {
-				const K = 2.0; // Smoothing factor. Might want to make this per stat or something
-				const P = this.statValues[name];
-				const C = value;
-				this.statValues[name] = (K * (C - P)) + P;
+                const prev_value = this.statValues[name];
+                const num_samples = this.ema_samples[name];
+                if (num_samples < 10) {
+                    this.statValues[name] = this.calcMA(prev_value, num_samples, value);
+                } else {
+                    this.statValues[name] = this.calcEMA(prev_value, num_samples, value);
+                }
+                this.ema_samples[name] += 1;
 			} else {
 				this.statValues[name] = value;
+                this.ema_samples[name] = 1;
 			}
 		} else if (statOptions.operation == StatOperation.Add) {
 			this.statValues[name] += value;
