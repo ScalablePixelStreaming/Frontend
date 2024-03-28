@@ -29,6 +29,7 @@ export { CandidateStat } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
 export { DataChannelStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
 export { InboundAudioStats, InboundVideoStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
 export { OutBoundVideoStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
+export { StatsReceivedEvent } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
 
 // Epic Games Pixel Streaming Frontend UI exports
 export { Application, UIOptions } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4';
