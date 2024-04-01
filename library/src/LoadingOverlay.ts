@@ -1,11 +1,6 @@
 import { TextOverlay } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4';
 
 export class LoadingOverlay extends TextOverlay {
-	maxDrops = 50;
-	maxSize = 5;
-	maxDuration = 5;
-	minDelay = -20;
-	rainDrops: Array<Raindrop> = [];
 
 	private static _rootElement: HTMLElement;
 	private static _textElement: HTMLElement;
@@ -66,46 +61,6 @@ export class LoadingOverlay extends TextOverlay {
 		super(parentElem, LoadingOverlay.rootElement(), LoadingOverlay.textElement());
 	}
 
-	public animate() {
-		// Update the existing drops to have an increased speed
-		for (let raindrop of this.rainDrops) {
-			raindrop.element.setAttribute("style", "animation-duration:" + (1 + Math.random() * this.maxDuration) + "s;")
-		}
-
-		let i = 0;
-		while (i < this.maxDrops) {
-			const dropContainer = document.createElement("div");
-			dropContainer.id = "dropContainer";
-
-			const raindrop = new Raindrop();
-			raindrop.size = Math.random() * this.maxSize + 0.2;
-			raindrop.delay = Math.random() * this.minDelay;
-			raindrop.duration = Math.random() * this.maxDuration;
-			raindrop.offsetLeft = Math.floor(Math.random() * LoadingOverlay.rootElement().clientWidth);
-			raindrop.element = dropContainer;
-
-
-
-			const drop = document.createElement("drop");
-			drop.setAttribute("style", "left: " + raindrop.offsetLeft + "px; width:" + raindrop.size + "px; overflow: visible;");
-			dropContainer.setAttribute("style", "animation-delay:" + raindrop.delay + "s; animation-duration:" + (1 + raindrop.duration) + "s;");
-
-			const head = document.createElement("div");
-			head.id = "drophead";
-			raindrop.headsize = raindrop.size * 3;
-			head.setAttribute("style", "left: -" + raindrop.size + "px; width:" + raindrop.headsize + "px; height: " + raindrop.headsize + "px;");
-			drop.appendChild(head);
-
-			dropContainer.appendChild(drop);
-			LoadingOverlay.rootElement().append(dropContainer);
-			this.rainDrops.push(raindrop);
-			i++;
-		}
-
-		this.maxDrops /= 1.5
-		this.maxDuration /= 1.5;
-	}
-
 	/**
 	 * Update the text overlays inner text 
 	 * @param text the update text to be inserted into the overlay 
@@ -121,13 +76,4 @@ export class LoadingOverlay extends TextOverlay {
 			this.textElement.append(LoadingOverlay.spinner());
 		}
 	}
-}
-
-class Raindrop {
-	size: number;
-	delay: number;
-	duration: number;
-	offsetLeft: number;
-	headsize: number;
-	element: HTMLElement;
 }
