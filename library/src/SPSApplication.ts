@@ -16,7 +16,6 @@ import {
 // the signalling server URL builder.
 declare var WEBSOCKET_URL: string;
 
-
 export class SPSApplication extends Application {
 	private loadingOverlay: LoadingOverlay;
 	private signallingExtension: SPSSignalling;
