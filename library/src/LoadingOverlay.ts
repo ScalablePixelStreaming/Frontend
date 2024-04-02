@@ -4,7 +4,7 @@ export class LoadingOverlay extends TextOverlay {
 
 	private static _rootElement: HTMLElement;
 	private static _textElement: HTMLElement;
-	private static _spinner: HTMLElement;
+	private static _spinnerElement: HTMLElement;
 
 	/**
 	* @returns The created root element of this overlay.
@@ -31,27 +31,27 @@ export class LoadingOverlay extends TextOverlay {
 
 
 	public static spinner(): HTMLElement {
-		if (!LoadingOverlay._spinner) {
+		if (!LoadingOverlay._spinnerElement) {
 			// build the spinner div
 			const size = LoadingOverlay._rootElement.clientWidth * 0.03;
-			LoadingOverlay._spinner = document.createElement('div');
-			LoadingOverlay._spinner.id = "loading-spinner"
-			LoadingOverlay._spinner.className = "loading-spinner";
-			LoadingOverlay._spinner.setAttribute("style", "width: " + size + "px; height: " + size + "px;");
+			LoadingOverlay._spinnerElement = document.createElement('div');
+			LoadingOverlay._spinnerElement.id = "loading-spinner"
+			LoadingOverlay._spinnerElement.className = "loading-spinner";
+			LoadingOverlay._spinnerElement.setAttribute("style", "width: " + size + "px; height: " + size + "px;");
 
 			const SpinnerSectionOne = document.createElement("div");
 			SpinnerSectionOne.setAttribute("style", "width: " + size * 0.8 + "px; height: " + size * 0.8 + "px; border-width: " + size * 0.125 + "px;");
-			LoadingOverlay._spinner.appendChild(SpinnerSectionOne);
+			LoadingOverlay._spinnerElement.appendChild(SpinnerSectionOne);
 
 			const SpinnerSectionTwo = document.createElement("div");
 			SpinnerSectionTwo.setAttribute("style", "width: " + size * 0.8 + "px; height: " + size * 0.8 + "px; border-width: " + size * 0.125 + "px;");
-			LoadingOverlay._spinner.appendChild(SpinnerSectionTwo);
+			LoadingOverlay._spinnerElement.appendChild(SpinnerSectionTwo);
 
 			const SpinnerSectionThree = document.createElement("div");
 			SpinnerSectionThree.setAttribute("style", "width: " + size * 0.8 + "px; height: " + size * 0.8 + "px; border-width: " + size * 0.125 + "px;");
-			LoadingOverlay._spinner.appendChild(SpinnerSectionThree);
+			LoadingOverlay._spinnerElement.appendChild(SpinnerSectionThree);
 		}
-		return LoadingOverlay._spinner;
+		return LoadingOverlay._spinnerElement;
 	}
 	/**
 	 * Construct a connect overlay with a connection button.
