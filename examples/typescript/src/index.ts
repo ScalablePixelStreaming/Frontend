@@ -1,4 +1,11 @@
-import { Config, PixelStreaming, SPSApplication, TextParameters, PixelStreamingApplicationStyle, MessageRecv, Flags } from "@tensorworks/libspsfrontend";
+import {
+	Config,
+	Flags,
+	MessageRecv,
+	PixelStreaming,
+	PixelStreamingApplicationStyle,
+	SPSApplication
+} from "@tensorworks/libspsfrontend";
 
 // Apply default styling from Epic Games Pixel Streaming Frontend
 export const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
