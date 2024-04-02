@@ -237,7 +237,7 @@ export class SPSSignalling {
 				break;
 		}
 
-		// Emit an instance state changed with error
+		// Emit an instance state changed with an informative message and if error occurred
 		this.onInstanceStateChanged(instanceStateMessage, isError);
 	}
 
@@ -249,7 +249,7 @@ export class SPSSignalling {
 		let instanceStateMessage = "";
 		let isError = false;
 
-		// get the response type
+		// Create an informative message based on the state of the authentication response
 		switch (authResponse.outcome) {
 			case MessageAuthResponseOutcomeType.AUTHENTICATED:
 				instanceStateMessage = "Step 1/3: Requesting Instance";
@@ -270,6 +270,7 @@ export class SPSSignalling {
 				break;
 		}
 
+		// Emit an authentication response with an informative message and if an error occurred
 		this.onAuthenticationResponse(instanceStateMessage, isError);
 	}
 }
