@@ -113,9 +113,9 @@ export class SPSApplication extends Application {
 
 	/**
 	 * Shows the loading overlay
-	 * @param signallingResp The informative message to display
+	 * @param message The message to display
 	 */
-	showLoadingOverlay(signallingResp: string) {
+	showLoadingOverlay(message: string) {
 
 		// Hide the current overlay
 		this.hideCurrentOverlay();
@@ -124,7 +124,7 @@ export class SPSApplication extends Application {
 		this.loadingOverlay.show();
 
 		// Update the loading overlay with the signalling response
-		this.loadingOverlay.update(signallingResp);
+		this.loadingOverlay.update(message);
 
 		// Set the current overlay to the loading overlay
 		this.currentOverlay = this.loadingOverlay;
