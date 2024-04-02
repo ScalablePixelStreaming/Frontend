@@ -1,8 +1,16 @@
-import { Application, SettingUIFlag, UIOptions } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4';
-import { AggregatedStats, SettingFlag, TextParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
 import { LoadingOverlay } from './LoadingOverlay';
 import { SPSSignalling } from './SignallingExtension';
 import { MessageStats } from './Messages';
+import {
+	AggregatedStats,
+	SettingFlag,
+	TextParameters
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
+import {
+	Application,
+	SettingUIFlag,
+	UIOptions
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4';
 
 // For local testing. Declare a websocket URL that can be imported via a .env file that will override 
 // the signalling server URL builder.
@@ -61,7 +69,7 @@ export class SPSApplication extends Application {
 		this.stream.setSignallingUrlBuilder(() => {
 
 			// if we have overriden the signalling server URL with a .env file use it here
-			if (WEBSOCKET_URL !== undefined ) {
+			if (WEBSOCKET_URL !== undefined) {
 				return WEBSOCKET_URL as string;
 			}
 
