@@ -14,7 +14,7 @@ export enum MessageSendTypes {
 }
 
 /**
- * Aggregated Stats Message Wrapper
+ * Aggregated Stats Message Wrapper to send stats to the signalling server
  */
 export class MessageStats extends MessageSend {
 	inboundVideoStats: InboundVideoStats;
@@ -30,7 +30,11 @@ export class MessageStats extends MessageSend {
 	 */
 	constructor(aggregatedStats: AggregatedStats) {
 		super();
+		
+		// Set the message type as stats
 		this.type = MessageSendTypes.STATS
+
+		// Map the aggregated stats to the message stats properties
 		this.inboundVideoStats = aggregatedStats.inboundVideoStats;
 		this.inboundAudioStats = aggregatedStats.inboundAudioStats;
 		this.candidatePair = aggregatedStats.getActiveCandidatePair();
