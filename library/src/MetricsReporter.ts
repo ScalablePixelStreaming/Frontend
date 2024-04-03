@@ -6,33 +6,40 @@ declare var BUCCANEER_URL: string;
 enum StatOperation {
 	Reset = 1,
 	Add,
-	Average
+	Average,
+    Min,
+    Max
 }
 
 interface StatOptions {
+    description: string;
 	operation: StatOperation;
 }
 
 const SupportedStats : Record<string, StatOptions> = {
-	'video_width': { operation: StatOperation.Reset },
-	'video_height': { operation: StatOperation.Reset },
-	'video_bitrate': { operation: StatOperation.Average },
-	'video_dropped': { operation: StatOperation.Reset },
-	'video_packets_lost': { operation: StatOperation.Reset },
-	'video_fps': { operation: StatOperation.Average },
-	'video_pli_count': { operation: StatOperation.Reset },
-	'video_keyframes': { operation: StatOperation.Reset },
-	'video_nack_count': { operation: StatOperation.Reset },
-	'video_freeze_count': { operation: StatOperation.Reset },
-	'video_jitter': { operation: StatOperation.Average },
-	'video_frame_count': { operation: StatOperation.Reset },
-	'audio_bitrate': { operation: StatOperation.Average },
-	'loading_duration': { operation: StatOperation.Reset },
-	'session_duration': { operation: StatOperation.Reset }
+	'video_width': { description: 'Video width', operation: StatOperation.Reset },
+	'video_height': { description: 'Video height', operation: StatOperation.Reset },
+	'video_bitrate': { description: 'Video bitrate', operation: StatOperation.Average },
+	'video_bitrate_min': { description: 'Min video bitrate', operation: StatOperation.Min },
+	'video_bitrate_max': { description: 'Max video bitrate', operation: StatOperation.Max },
+	'video_dropped': { description: 'Video frames dropped', operation: StatOperation.Reset },
+	'video_packets_lost': { description: 'Video packets lost', operation: StatOperation.Reset },
+	'video_fps': { description: 'Video frames per second', operation: StatOperation.Average },
+	'video_pli_count': { description: 'Video PLI count', operation: StatOperation.Reset },
+	'video_keyframes': { description: 'Video keyframes', operation: StatOperation.Reset },
+	'video_nack_count': { description: 'Video NACK count', operation: StatOperation.Reset },
+	'video_freeze_count': { description: 'Video freeze count', operation: StatOperation.Reset },
+	'video_jitter': { description: 'Video jitter', operation: StatOperation.Average },
+	'video_frame_count': { description: 'Video frame count', operation: StatOperation.Reset },
+	'audio_bitrate': { description: 'Audio bitrate', operation: StatOperation.Average },
+	'audio_bitrate_min': { description: 'Min audio bitrate', operation: StatOperation.Min },
+	'audio_bitrate_max': { description: 'Max audio bitrate', operation: StatOperation.Max },
+	'loading_duration': { description: 'Loading time', operation: StatOperation.Reset },
+	'session_duration': { description: 'Session time', operation: StatOperation.Reset }
 }
 
 export class MetricsReporter {
-	private statValues: any;
+	private stat_values: any;
 	private ema_samples: any;
 	private session_id: string | undefined;
 	private user_agent: string | undefined;
@@ -41,7 +48,7 @@ export class MetricsReporter {
 	private disconnect_reason: string | undefined;
 
 	constructor() {
-		this.statValues = {};
+		this.stat_values = {};
         this.ema_samples = {};
 	}
 
@@ -87,24 +94,28 @@ export class MetricsReporter {
 
 		// if sessionData is defined we can assume the session is active
 		if (aggregatedStats.inboundVideoStats) {
-			const videoStats = aggregatedStats.inboundVideoStats;
-			this.updateStatValue("video_width", videoStats.frameWidth);
-			this.updateStatValue("video_height", videoStats.frameHeight);
-			this.updateStatValue("video_bitrate", videoStats.bitrate);
-			this.updateStatValue("video_dropped", videoStats.framesDropped);
-			this.updateStatValue("video_packets_lost", videoStats.packetsLost);
+			const video_stats = aggregatedStats.inboundVideoStats;
+			this.updateStatValue("video_width", video_stats.frameWidth);
+			this.updateStatValue("video_height", video_stats.frameHeight);
+			this.updateStatValue("video_bitrate", video_stats.bitrate);
+			this.updateStatValue("video_bitrate_min", video_stats.bitrate);
+			this.updateStatValue("video_bitrate_max", video_stats.bitrate);
+			this.updateStatValue("video_dropped", video_stats.framesDropped);
+			this.updateStatValue("video_packets_lost", video_stats.packetsLost);
 			// rtt?
-			this.updateStatValue("video_fps", videoStats.framesPerSecond);
-			this.updateStatValue("video_pli_count", videoStats.pliCount);
-			this.updateStatValue("video_keyframes", videoStats.keyFramesDecoded);
-			this.updateStatValue("video_nack_count", videoStats.nackCount);
-			this.updateStatValue("video_freeze_count", videoStats.freezeCount);
-			this.updateStatValue("video_jitter", videoStats.jitter);
-			this.updateStatValue("video_frame_count", videoStats.framesReceived);
+			this.updateStatValue("video_fps", video_stats.framesPerSecond);
+			this.updateStatValue("video_pli_count", video_stats.pliCount);
+			this.updateStatValue("video_keyframes", video_stats.keyFramesDecoded);
+			this.updateStatValue("video_nack_count", video_stats.nackCount);
+			this.updateStatValue("video_freeze_count", video_stats.freezeCount);
+			this.updateStatValue("video_jitter", video_stats.jitter);
+			this.updateStatValue("video_frame_count", video_stats.framesReceived);
 		}
 		if (aggregatedStats.inboundAudioStats) {
 			const audioStats = aggregatedStats.inboundAudioStats;
 			this.updateStatValue("audio_bitrate", audioStats.bitrate);
+			this.updateStatValue("audio_bitrate_min", audioStats.bitrate);
+			this.updateStatValue("audio_bitrate_max", audioStats.bitrate);
 		}
 	}
 
@@ -123,31 +134,43 @@ export class MetricsReporter {
 			return;
 		}
 
-		const statOptions = SupportedStats[name];
-		if (!statOptions) {
+		const stat_options = SupportedStats[name];
+		if (!stat_options) {
 			console.log(`Unknown stat ${name}`);
 			return;
 		}
 
-		if (statOptions.operation == StatOperation.Average) {
+		if (stat_options.operation == StatOperation.Average) {
 			// Calculate EMA
-			if (this.statValues[name]) {
-                const prev_value = this.statValues[name];
+			if (this.stat_values[name]) {
+                const prev_value = this.stat_values[name];
                 const num_samples = this.ema_samples[name];
                 if (num_samples < 10) {
-                    this.statValues[name] = this.calcMA(prev_value, num_samples, value);
+                    this.stat_values[name] = this.calcMA(prev_value, num_samples, value);
                 } else {
-                    this.statValues[name] = this.calcEMA(prev_value, num_samples, value);
+                    this.stat_values[name] = this.calcEMA(prev_value, num_samples, value);
                 }
                 this.ema_samples[name] += 1;
 			} else {
-				this.statValues[name] = value;
+				this.stat_values[name] = value;
                 this.ema_samples[name] = 1;
 			}
-		} else if (statOptions.operation == StatOperation.Add) {
-			this.statValues[name] += value;
+		} else if (stat_options.operation == StatOperation.Add) {
+			this.stat_values[name] += value;
+        } else if (stat_options.operation == StatOperation.Min) {
+            if (!this.stat_values[name]) {
+                this.stat_values[name] = value;
+            } else {
+                this.stat_values[name] = Math.min(this.stat_values[name], value);
+            }
+        } else if (stat_options.operation == StatOperation.Max) {
+            if (!this.stat_values[name]) {
+                this.stat_values[name] = value;
+            } else {
+                this.stat_values[name] = Math.max(this.stat_values[name], value);
+            }
 		} else {
-			this.statValues[name] = value;
+			this.stat_values[name] = value;
 		}
 	}
 
@@ -156,8 +179,10 @@ export class MetricsReporter {
 			id: this.session_id,
 			user_agent: this.user_agent,
 			disconnect_reason: this.disconnect_reason,
-			stat_values: this.statValues
+			stat_values: this.stat_values
 		}
+
+        // log session for loki
 
 		const events_url = `http://${BUCCANEER_URL || window.location.hostname}:8000/event`;
 		try {
@@ -166,6 +191,29 @@ export class MetricsReporter {
 		} catch (error) {
 			console.error(`Unable to POST session data to ${events_url}: ${error}`);
 		}
+
+        // post session stats for prometheus
+
+        const stats_package: any = {};
+        for (const stat_name in this.stat_values) {
+            stats_package[stat_name] = {
+                description: SupportedStats[stat_name].description,
+                value: this.stat_values[stat_name]
+            };
+        }
+
+        const post_data = {
+            id: this.session_id,
+            metrics: stats_package
+        };
+
+        const stats_url = `http://${BUCCANEER_URL || window.location.hostname}:8000/stats`;
+        try {
+            const blob = new Blob([JSON.stringify(post_data)], { type: 'application/json; charset=UTF-8' });
+            navigator.sendBeacon(stats_url, blob);
+        } catch (error) {
+            console.error(`Unable to POST stats data to ${stats_url}: ${error}`);
+        }
 	}
 }
 
