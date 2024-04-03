@@ -25,6 +25,8 @@ const SupportedStats : Record<string, StatOptions> = {
 	'video_dropped': { description: 'Video frames dropped', operation: StatOperation.Reset },
 	'video_packets_lost': { description: 'Video packets lost', operation: StatOperation.Reset },
 	'video_fps': { description: 'Video frames per second', operation: StatOperation.Average },
+	'video_fps_min': { description: 'Min video frames per second', operation: StatOperation.Min },
+	'video_fps_max': { description: 'Max video frames per second', operation: StatOperation.Max },
 	'video_pli_count': { description: 'Video PLI count', operation: StatOperation.Reset },
 	'video_keyframes': { description: 'Video keyframes', operation: StatOperation.Reset },
 	'video_nack_count': { description: 'Video NACK count', operation: StatOperation.Reset },
@@ -104,6 +106,8 @@ export class MetricsReporter {
 			this.updateStatValue("video_packets_lost", video_stats.packetsLost);
 			// rtt?
 			this.updateStatValue("video_fps", video_stats.framesPerSecond);
+			this.updateStatValue("video_fps_min", video_stats.framesPerSecond);
+			this.updateStatValue("video_fps_max", video_stats.framesPerSecond);
 			this.updateStatValue("video_pli_count", video_stats.pliCount);
 			this.updateStatValue("video_keyframes", video_stats.keyFramesDecoded);
 			this.updateStatValue("video_nack_count", video_stats.nackCount);
@@ -192,28 +196,31 @@ export class MetricsReporter {
 			console.error(`Unable to POST session data to ${events_url}: ${error}`);
 		}
 
-        // post session stats for prometheus
+        // i thought posting to prom would make grafana queries nicer but it was
+        // acting even weirder. if we need to post to prom we can reuse this code.
 
-        const stats_package: any = {};
-        for (const stat_name in this.stat_values) {
-            stats_package[stat_name] = {
-                description: SupportedStats[stat_name].description,
-                value: this.stat_values[stat_name]
-            };
-        }
+        // // post session stats for prometheus
 
-        const post_data = {
-            id: this.session_id,
-            metrics: stats_package
-        };
+        // const stats_package: any = {};
+        // for (const stat_name in this.stat_values) {
+        //     stats_package[stat_name] = {
+        //         description: SupportedStats[stat_name].description,
+        //         value: this.stat_values[stat_name]
+        //     };
+        // }
 
-        const stats_url = `http://${BUCCANEER_URL || window.location.hostname}:8000/stats`;
-        try {
-            const blob = new Blob([JSON.stringify(post_data)], { type: 'application/json; charset=UTF-8' });
-            navigator.sendBeacon(stats_url, blob);
-        } catch (error) {
-            console.error(`Unable to POST stats data to ${stats_url}: ${error}`);
-        }
+        // const post_data = {
+        //     id: this.session_id,
+        //     metrics: stats_package
+        // };
+
+        // const stats_url = `http://${BUCCANEER_URL || window.location.hostname}:8000/stats`;
+        // try {
+        //     const blob = new Blob([JSON.stringify(post_data)], { type: 'application/json; charset=UTF-8' });
+        //     navigator.sendBeacon(stats_url, blob);
+        // } catch (error) {
+        //     console.error(`Unable to POST stats data to ${stats_url}: ${error}`);
+        // }
 	}
 }
 
