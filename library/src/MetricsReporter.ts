@@ -47,6 +47,7 @@ export class MetricsReporter {
 	private user_agent: string | undefined;
 	private loading_start: number | undefined;
 	private start_time: number | undefined;
+    private disconnect_code: string | undefined;
 	private disconnect_reason: string | undefined;
 
 	constructor() {
@@ -71,7 +72,13 @@ export class MetricsReporter {
 		this.loading_start = undefined;
 	}
 
-	endSession(reason: string) {
+    // note: code is currently left as undefined since the webrtcdisconnect event does not include
+    // the code but only the reason.
+    // a possible solution for it might be to use webSocketControllers close event which contains
+    // the code and reason from the signalling server but reason is sometimes set by the frontend.
+    // the real solution for this would be to update the pixel streaming library code to include
+    // the code also.
+	endSession(reason: string, code: string) {
 		if (!this.session_id) {
 			return;
 		}
@@ -81,6 +88,7 @@ export class MetricsReporter {
 		this.updateStatValue("session_duration", session_duration);
 
 		// record end reason
+        this.disconnect_code = code;
 		this.disconnect_reason = reason;
 
 		this.postSessionData();
@@ -182,6 +190,7 @@ export class MetricsReporter {
 		const session_data = {
 			id: this.session_id,
 			user_agent: this.user_agent,
+            disconnect_code: this.disconnect_code,
 			disconnect_reason: this.disconnect_reason,
 			stat_values: this.stat_values
 		}

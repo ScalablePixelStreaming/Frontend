@@ -45,9 +45,9 @@ export class SPSApplication extends Application {
 			// register the event when the stream starts.
 			this.stream.addEventListener('webRtcConnected', () => this.metrics_reporter.startSession() );
 			// register the event when the browser closes or navigates away.
-			window.addEventListener('beforeunload', () => this.metrics_reporter.endSession("Navigated away"));
+			window.addEventListener('beforeunload', () => this.metrics_reporter.endSession("Navigated away", undefined));
 			// register the event when the remote session ends.
-			this.stream.addEventListener('webRtcDisconnected', () => this.metrics_reporter.endSession("WebRTC disconnect"));
+			this.stream.addEventListener('webRtcDisconnected', (e) => this.metrics_reporter.endSession(e.data.eventString, undefined));
 		}
 
 		this.stream.addEventListener(
