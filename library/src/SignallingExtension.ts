@@ -3,7 +3,7 @@ import {
 	MessageRecv,
 	MessageSend,
 	WebSocketController,
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.2';
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.3';
 
 /**
  * Auth Request Message Wrapper
