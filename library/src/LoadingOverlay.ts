@@ -1,4 +1,4 @@
-import { TextOverlay } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.2';
+import { TextOverlay } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.3';
 
 export class LoadingOverlay extends TextOverlay {
 	maxDrops = 50;

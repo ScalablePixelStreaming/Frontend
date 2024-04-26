@@ -1,6 +1,6 @@
 {
   "name": "@tensorworks/libspsfrontend",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "The Scalable Pixel Streaming Frontend Library consuming Epic Games' Pixel Streaming Frontend",
   "main": "dist/libspsfrontend.min.js",
   "module": "dist/libspsfrontend.esm.js",
@@ -14,8 +14,8 @@
   "author": "TensorWorks Pty Ltd",
   "license": "MIT",
   "dependencies": {
-    "@epicgames-ps/lib-pixelstreamingfrontend-ue5.2": "^0.5.1",
-    "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.2": "^0.4.1"
+    "@epicgames-ps/lib-pixelstreamingfrontend-ue5.3": "^1.0.3",
+    "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.3": "^1.0.3"
   },
   "devDependencies": {
     "css-loader": "^6.7.3",
