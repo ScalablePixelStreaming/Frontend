@@ -1,23 +1,21 @@
-# Migrating from `libspsfrontend` <=0.1.4
+# Migrating from `libspsfrontend` predating `v0.1.4`
 
-All SPS versions after `0.1.4` are now using the [Epic Games' Pixel Streaming frontend](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/master/Frontend). This shift to the Epic frontend has caused us to change both our API and our NPM packages.
+SPS frontend changed to use the [Epic Games Pixel Streaming frontend](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/master/Frontend) since version `0.1.4`, which involed mdofications both to our API and NPM packages.
 
----
+Below aresome common usage of the SPS Frontend API that has changed. Note that this list is not exhaustive, if you encounter more differences, please open an issue on this repository to report them.
 
-# API Usage
+### Listening for UE messages
 
-Below are common usage of SPS Frontend API that have now changed (this list is not exhaustive, if there are more you would like documented please open an issue).
+Refer to [this PR](https://github.com/EpicGames/PixelStreamingInfrastructure/pull/132) for more details.
 
-## Listening for UE messages
-
-**Before:** 
+Before:
 ```js
 iWebRtcController.dataChannelController.onResponse = (messageBuffer) => { 
 	/* whatever */ 
 }
 ```
 
-**Now:**
+Now:
 ```js
 pixelstreaming.addResponseEventListener(name, funct)
 
@@ -26,38 +24,30 @@ pixelstreaming.addResponseEventListener(name, funct)
 pixelstreaming.removeResponseEventListener(name)
 ```
 
-(More details [here](https://github.com/EpicGames/PixelStreamingInfrastructure/pull/132))
+### Sending messages to UE
 
----
+Refer to [this PR](https://github.com/EpicGames/PixelStreamingInfrastructure/pull/132) for more details.
 
-## Sending messages to UE
-
-**Before:** 
+Before:
 ```js
 iWebRtcController.sendUeUiDescriptor(JSON.stringify({ /* whatever */ } )) 
 ```
 
-**Now:**
+Now:
 ```js
 pixelstreaming.emitUIInteraction(data: object | string)
 ```
 
-(More details [here](https://github.com/EpicGames/PixelStreamingInfrastructure/pull/132))
+### Listening for WebRTC stream start
 
----
+Refer to [this PR](https://github.com/EpicGames/PixelStreamingInfrastructure/pull/110) for more details.
 
-## Listen for WebRTC stream start?
-
-**Before:** 
+Before: 
 ```js
 override onVideoInitialised()
 ```
 
-**Now:**
+Now:
 ```js
 pixelStreaming.addEventListener("videoInitialized", ()=> { /* Do something */ });
 ```
-
-(More details [here](https://github.com/EpicGames/PixelStreamingInfrastructure/pull/110))
-
-------
