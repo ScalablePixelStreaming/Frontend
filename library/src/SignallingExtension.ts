@@ -6,14 +6,14 @@ import {
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
 
 /**
- * Auth Request Message Wrapper
+ * Authentication request message wrapper
  */
 export class MessageAuthRequest extends MessageSend {
 	token: string;
 	provider: string;
 
 	/**
-	 * @param token - Token Provided by the Auth Provider
+	 * @param token - Token provided by the authentication provider
 	 * @param provider - Name of the provider that is registered in the auth plugin
 	 */
 	constructor(token: string, provider: string) {
@@ -25,17 +25,33 @@ export class MessageAuthRequest extends MessageSend {
 }
 
 /**
- * States of the UE Instance
+ * States of the UE instance request
  */
 export enum InstanceState {
+
+	/**
+	 * The instance is currently unallocated
+	 */
 	UNALLOCATED = "UNALLOCATED",
+
+	/**
+	 * The instance is currently pending
+	 */
 	PENDING = "PENDING",
+
+	/**
+	 * The instance failed to start
+	 */
 	FAILED = "FAILED",
+
+	/**
+	 * The instance is ready
+	 */
 	READY = "READY"
 }
 
 /**
- * Instance State Message wrapper
+ * Instance state message wrapper
  */
 export class MessageInstanceState extends MessageRecv {
 	state: InstanceState;
@@ -47,9 +63,25 @@ export class MessageInstanceState extends MessageRecv {
  * Types of Authentication reposes 
  */
 export enum MessageAuthResponseOutcomeType {
+
+	/**
+	 *  The authentication redirected used with Oauth 2.0
+	 */
 	REDIRECT = "REDIRECT",
+
+	/**
+	 * The token provided is invalid 
+	*/
 	INVALID_TOKEN = "INVALID_TOKEN",
+
+	/**
+	 *  The authentication was successfully authenticated
+	 */
 	AUTHENTICATED = "AUTHENTICATED",
+
+	/**
+	 * There was an error with authentication
+	 */
 	ERROR = "ERROR"
 }
 
@@ -82,10 +114,15 @@ export class MessageRequestInstance extends MessageSend {
  */
 export class SPSSignalling {
 
+	// Define the instance state changed event
 	onInstanceStateChanged: (stateChangedMsg: string, isError: boolean) => void;
+
+	// Define the authentication response event
 	onAuthenticationResponse: (authRespMsg: string, isError: boolean) => void;
 
 	constructor(websocketController: WebSocketController) {
+
+		// Initialise the signalling protocol extensions
 		this.extendSignallingProtocol(websocketController);
 	}
 
@@ -94,38 +131,52 @@ export class SPSSignalling {
 	 */
 	extendSignallingProtocol(webSocketController: WebSocketController) {
 
-		// authenticationRequired
+		// Add the authentication required signalling message to the signalling protocol
 		webSocketController.signallingProtocol.addMessageHandler("authenticationRequired", (authReqPayload: string) => {
 			Logger.Log(Logger.GetStackTrace(), "AUTHENTICATION_REQUIRED", 6);
 			const url_string = window.location.href;
 			const url = new URL(url_string);
+
+			// Create a authentication request message with the token and provider if supplied from the url parameters
 			const authRequest = new MessageAuthRequest(url.searchParams.get("code"), url.searchParams.get("provider"));
+
+			// Send the authentication request message to the signalling server
 			webSocketController.webSocket.send(authRequest.payload());
 		});
 
-		// instanceState
+		// Add the instance state signalling message to the signalling protocol
 		webSocketController.signallingProtocol.addMessageHandler("instanceState", (instanceStatePayload: string) => {
 			Logger.Log(Logger.GetStackTrace(), "INSTANCE_STATE", 6);
+
+			// Create a instance state message from the instance state message payload
 			const instanceState: MessageInstanceState = JSON.parse(instanceStatePayload);
+
+			// Call how to handle the instance state changed
 			this.handleInstanceStateChanged(instanceState);
 		});
 
-		// authenticationResponse
+		// Add the authentication response signalling message to the signalling protocol
 		webSocketController.signallingProtocol.addMessageHandler("authenticationResponse", (authRespPayload: string) => {
 			Logger.Log(Logger.GetStackTrace(), "AUTHENTICATION_RESPONSE", 6);
 
+			// Create the authentication response from the authentication response payload
 			const authenticationResponse: MessageAuthResponse = JSON.parse(authRespPayload);
 
+			// Call how to handle the authentication response
 			this.handleAuthenticationResponse(authenticationResponse);
 
+			// Handle the type of the authentication response
 			switch (authenticationResponse.outcome) {
 				case MessageAuthResponseOutcomeType.REDIRECT: {
+
+					// Redirect the location to the redirect value
 					window.location.href = authenticationResponse.redirect;
 					break;
 				}
 				case MessageAuthResponseOutcomeType.AUTHENTICATED: {
 					Logger.Log(Logger.GetStackTrace(), "User is authenticated and now requesting an instance", 6);
 
+					// Send a instance request massage to the signalling server
 					webSocketController.webSocket.send(new MessageRequestInstance().payload());
 					break;
 				}
@@ -155,7 +206,7 @@ export class SPSSignalling {
 		let isInstancePending = false;
 		let isError = false;
 
-		// get the response type
+		// Create an informative message based on the state of the instance
 		switch (instanceState.state) {
 			case InstanceState.UNALLOCATED:
 				instanceStateMessage = "Instance Unallocated: " + instanceState.details;
@@ -186,11 +237,8 @@ export class SPSSignalling {
 				break;
 		}
 
-		if (isError) {
-			this.onInstanceStateChanged(instanceStateMessage, true);
-		} else {
-			this.onInstanceStateChanged(instanceStateMessage, false);
-		}
+		// Emit an instance state changed with an informative message and if error occurred
+		this.onInstanceStateChanged(instanceStateMessage, isError);
 	}
 
 	/**
@@ -201,7 +249,7 @@ export class SPSSignalling {
 		let instanceStateMessage = "";
 		let isError = false;
 
-		// get the response type
+		// Create an informative message based on the state of the authentication response
 		switch (authResponse.outcome) {
 			case MessageAuthResponseOutcomeType.AUTHENTICATED:
 				instanceStateMessage = "Step 1/3: Requesting Instance";
@@ -222,6 +270,7 @@ export class SPSSignalling {
 				break;
 		}
 
+		// Emit an authentication response with an informative message and if an error occurred
 		this.onAuthenticationResponse(instanceStateMessage, isError);
 	}
 }

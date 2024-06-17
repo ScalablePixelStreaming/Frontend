@@ -1,4 +1,11 @@
-import { Config, PixelStreaming, SPSApplication, TextParameters, PixelStreamingApplicationStyle, MessageRecv, Flags } from "@tensorworks/libspsfrontend";
+import {
+	Config,
+	Flags,
+	MessageRecv,
+	PixelStreaming,
+	PixelStreamingApplicationStyle,
+	SPSApplication
+} from "@tensorworks/libspsfrontend";
 
 // Apply default styling from Epic Games Pixel Streaming Frontend
 export const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
@@ -20,6 +27,7 @@ class ScalablePixelStreaming extends PixelStreaming {
 	}
 };
 
+// Initialise the SPS frontend on load of the body element
 document.body.onload = function () {
 
 	// Create a config object. We default to sending the WebRTC offer from the browser as true, TimeoutIfIdle to true, AutoConnect to false and MaxReconnectAttempts to 0
@@ -34,10 +42,12 @@ document.body.onload = function () {
 		stream.handleOnConfig(messageExtendedConfig);
 	}
 
-	// Create and append our application
+	// Create the SPS application
 	const spsApplication = new SPSApplication({
 		stream,
 		onColorModeChanged: (isLightMode) => PixelStreamingApplicationStyles.setColorMode(isLightMode) /* Light/Dark mode support. */
 	});
+
+	// Append the SPS application element to the document body element
 	document.body.appendChild(spsApplication.rootElement);
 }
