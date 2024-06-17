@@ -68,7 +68,7 @@ These commands and scripts will install and build the library.
 3) Run the following commands in the `examples/typescript` directory of the source tree:
 ```bash
 # Install the examples' dependencies
-npm npm install
+npm install
 
 # Symlink the library to the example
 npm run symlink
