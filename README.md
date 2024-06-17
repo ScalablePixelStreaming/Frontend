@@ -15,7 +15,7 @@ Refer to our [Scalable Pixel Streaming frontend utilisation guide](./docs/fronte
 
 ### Migrating legacy Scalable Pixel Streaming frontend
 
-All SPS versions since `v 0.1.4` are using the current version of Epic Games Pixel Streaming frontend. Refer to [our migration guide](./docs/api_transition_guide.md) if your frontend predates this version.
+All SPS versions since `v0.1.4` are using the current version of Epic Games Pixel Streaming frontend. Refer to [our migration guide](./docs/api_transition_guide.md) if your frontend predates this version.
 
 ### Scalable Pixel Streaming frontend reference
 
