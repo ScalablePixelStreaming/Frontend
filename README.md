@@ -19,13 +19,13 @@ All SPS versions since `v0.1.4` are using the current version of Epic Games Pixe
 
 ### Scalable Pixel Streaming frontend reference
 
-The Scalable Pixel Streaming frontend is a part of a complex system which abstracts a lot of its complexities behind the library. Refer to our [reference guide](./docs/sps_frontend_refrence_guide.md) to gain a deeper understanding of how the SPS frontend fits within Scalable Pixel Streaming as a whole.
+The Scalable Pixel Streaming frontend is part of a complex system that abstracts a lot of its complexities behind the library. Refer to our [reference guide](./docs/sps_frontend_refrence_guide.md) to gain a deeper understanding of how the SPS frontend fits within Scalable Pixel Streaming as a whole.
 
 ## Issues
 
 As the SPS frontend is an implementation of the Epic Games Pixel Streaming frontend, the majority of issues will pertain to the Epic Games frontend and should be reported on [their repository](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/issues).
 
-If you encounter an issues specific to the SPS implementation, please report your issue [here](https://github.com/ScalablePixelStreaming/Frontend/issues).
+If you encounter an issue specific to the SPS implementation, please report it [here](https://github.com/ScalablePixelStreaming/Frontend/issues).
 
 
 ## Legal
