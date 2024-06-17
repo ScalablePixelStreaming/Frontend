@@ -2,17 +2,17 @@
 
 ## Overview 
 
-The Scalable Pixel Streaming (SPS) frontend is a library of HTML, CSS, and TypeScript code that runs in web browsers and allows users to connect and interact with Scalable Pixel Streaming applications. It consumes the Epic Games Pixel Streaming frontend and UI libraries, and extends their signalling server and WebSocket packages. Note that the Epic Games Pixel Streaming frontend can be configured to work with Scalable Pixel Streaming signalling severs.
+The Scalable Pixel Streaming (SPS) frontend is a library of HTML, CSS, and TypeScript code that runs in web browsers and allows users to connect and interact with Scalable Pixel Streaming applications. It consumes the Epic Games Pixel Streaming frontend and UI libraries and extends their signalling server and WebSocket packages. Note that the Epic Games Pixel Streaming frontend can be configured to work with Scalable Pixel Streaming signalling servers.
 
 ## Epic Games Pixel Streaming frontend and UI frontend NPM packages
 
-NPM packages consumed by SPS frontend are:
+NPM packages consumed by the SPS frontend are:
 
 - [Pixel Streaming Frontend UI](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4)
 
-### Pixel Streaming Frontend
+### Pixel Streaming frontend
 
-NPM package for the Pixel Streaming frontend consumed by SPS is located [here](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.4).
+The NPM package for the Pixel Streaming frontend consumed by SPS is located [here](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.4).
 
 It contains the following functionality:
 
@@ -23,9 +23,9 @@ It contains the following functionality:
 - Video and audio stream handling;
 - Logic for: AFK, FreezeFrames, Mic, TURN, SDP.
 
-### Pixel Streaming Frontend UI
+### Pixel Streaming frontend UI
 
-NPM package for the Pixel Streaming UI frontend consumed by SPS is located [here](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4).
+The NPM package for the Pixel Streaming UI frontend consumed by SPS is located [here](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4).
 
 It contains the following functionality:
 
@@ -38,15 +38,15 @@ It contains the following functionality:
 
 ## SPS frontend packages
 
-### SPS frontend Library
+### SPS frontend library
 
-The library includes all of the custom signalling logic that Scalable Pixel Streaming signalling servers require to work. The library can be either obtained through [GitHub](https://github.com/ScalablePixelStreaming/Frontend) or [NPM](https://www.npmjs.com/package/@tensorworks/libspsfrontend). The library must be initialised via HTML and Javascript. It is written in TypeScript, but configured to export as a UMD module and can be consumed by plain JavaScript and most JavaScript frameworks.  
+The library includes all of the custom signalling logic that Scalable Pixel Streaming signalling servers require to work. The library can be obtained either through [GitHub](https://github.com/ScalablePixelStreaming/Frontend) or [NPM](https://www.npmjs.com/package/@tensorworks/libspsfrontend). The library must be initialised via HTML and Javascript. It is written in TypeScript, but configured to export as a UMD module and can be consumed by plain JavaScript and most JavaScript frameworks.  
 
 ### SPS frontend TypeScript example
 
-Our [TypeScript example](https://github.com/ScalablePixelStreaming/Frontend/tree/main/examples/typescript) is a simple HTML, CSS, and TypeScript implementation that initializes the SPS frontend library by instantiating the library components and starting a connection to the signalling server.
+Our [TypeScript example](https://github.com/ScalablePixelStreaming/Frontend/tree/main/examples/typescript) is a simple HTML, CSS, and TypeScript implementation that initialises the SPS frontend library by instantiating the library components and starting a connection to the signalling server.
 
-## Installing and consumping SPS packages
+## Installing and consuming SPS packages
 
 Download the [SPS frontend source code from GitHub](https://github.com/ScalablePixelStreaming/Frontend).
 
@@ -145,7 +145,7 @@ const spsApplication = new SPSApplication({
 });
 ```
 
-8) Append the `spsApplication.rootElement` inside a DOM element of your choice or inject directly into the body of the web page like in the TypeScript example:
+8) Append the `spsApplication.rootElement` inside a DOM element of your choice or inject directly into the body of the web page, like in the TypeScript example:
 
 ```typescript
 document.body.appendChild(spsApplication.rootElement);
@@ -185,7 +185,7 @@ When serving the SPS frontend, it will build a default WebSocket address to conn
 
 #### The .env file for the TypeScript example
 
-In the TypeScript example there is a `.env.example` file containing a filler URL in the `WEBSOCKET_URL` line. This file can be used to hard code a WebSocket address that can be consumed by the example as shown above. This example is able to work with the help of the [dotenv NPM package](https://www.npmjs.com/package/dotenv) in the `webpack.common.js` file in the TypeScript example. To implement this example follow these steps:
+In the TypeScript example, there is a `.env.example` file containing a filler URL in the `WEBSOCKET_URL` line. This file can be used to hard code a WebSocket address that can be consumed by the example as shown above. This example is able to work with the help of the [dotenv NPM package](https://www.npmjs.com/package/dotenv) in the `webpack.common.js` file in the TypeScript example. To implement this example, follow these steps:
 
 1) Rename the `.env.example` to `.env`.
 2) Replace the placeholder URL with the WebSocket URL you wish to consume.
@@ -208,7 +208,7 @@ new webpack.DefinePlugin({
 }),
 ```
 
-4) Create the `.env` file in the path you set in the rpevious step with the variable of your choice:
+4) Create the `.env` file in the path you set in the previous step with the variable of your choice:
 
 ```bash
 WEBSOCKET_URL=ws://example.com/your/ws
@@ -231,4 +231,4 @@ if(webSocketAddress != ""){
 
 ## SPS frontend and frontend UI customisation
 
-Refer to [the official Pixel Streaming repository documentation](https://github.com/EpicGamesExt/PixelStreamingInfrastructure#readme) to learn more about further utilising the Epic Games Pixel Streaming frontend and frontend UI. Utilise the supplied SPS frontend library as a template for further customization, and leverage Pixel Streaming frontend UI types to further customise UI elements, such as overlays and visual elements.
+Refer to [the official Pixel Streaming repository documentation](https://github.com/EpicGamesExt/PixelStreamingInfrastructure#readme) to learn more about further utilising the Epic Games Pixel Streaming frontend and frontend UI. Utilise the supplied SPS frontend library as a template for further customisation, and leverage Pixel Streaming frontend UI types to further customise UI elements, such as overlays and visual elements.
