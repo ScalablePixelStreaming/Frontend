@@ -3,15 +3,17 @@ import { AggregatedStats, SettingFlag, TextParameters } from '@epicgames-ps/lib-
 import { LoadingOverlay } from './LoadingOverlay';
 import { SPSSignalling } from './SignallingExtension';
 import { MessageStats } from './Messages';
+import { MetricsReporter } from './MetricsReporter';
 
 // For local testing. Declare a websocket URL that can be imported via a .env file that will override 
 // the signalling server URL builder.
 declare var WEBSOCKET_URL: string;
-
+declare var ENABLE_METRICS: boolean;
 
 export class SPSApplication extends Application {
 	private loadingOverlay: LoadingOverlay;
 	private signallingExtension: SPSSignalling;
+	private metrics_reporter: MetricsReporter;
 
 	static Flags = class {
 		static sendToServer = "sendStatsToServer"
@@ -38,15 +40,27 @@ export class SPSApplication extends Application {
 		spsSettingsSection.appendChild(new SettingUIFlag(sendStatsToServerSetting).rootElement);
 		this.loadingOverlay = new LoadingOverlay(this.stream.videoElementParent);
 
+		if (ENABLE_METRICS) {
+			this.metrics_reporter = new MetricsReporter();
+			// register the event when the stream starts.
+			this.stream.addEventListener('webRtcConnected', () => this.metrics_reporter.startSession() );
+			// register the event when the browser closes or navigates away.
+			window.addEventListener('beforeunload', () => this.metrics_reporter.endSession("Navigated away", undefined));
+			// register the event when the remote session ends.
+			this.stream.addEventListener('webRtcDisconnected', (e) => this.metrics_reporter.endSession(e.data.eventString, undefined));
+		}
+
 		this.stream.addEventListener(
 			'statsReceived',
 			({ data: { aggregatedStats } }) => {
+				this.metrics_reporter?.onSessionStats(aggregatedStats);
 				if (sendStatsToServerSetting.flag) {
 					this.sendStatsToSignallingServer(aggregatedStats);
 				}
 			}
 		);
 	}
+
 
 	handleSignallingResponse(signallingResp: string, isError: boolean) {
 		if (isError) {
@@ -81,6 +95,8 @@ export class SPSApplication extends Application {
 		this.loadingOverlay.update(signallingResp);
 
 		this.currentOverlay = this.loadingOverlay;
+
+		this.metrics_reporter?.startLoading();
 	}
 
 	/**
@@ -92,3 +108,4 @@ export class SPSApplication extends Application {
 		this.stream.webSocketController.webSocket.send(data.payload());
 	}
 }
+
