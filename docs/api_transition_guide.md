@@ -1,8 +1,8 @@
 # Migrating from `libspsfrontend` predating `v0.1.4`
 
-SPS frontend changed to use the [Epic Games Pixel Streaming frontend](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/master/Frontend) since version `0.1.4`, which involed mdofications both to our API and NPM packages.
+SPS frontend changed to use the [Epic Games Pixel Streaming frontend](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/master/Frontend) since version `0.1.4`, which involved modifications both to our API and NPM packages.
 
-Below aresome common usage of the SPS Frontend API that has changed. Note that this list is not exhaustive, if you encounter more differences, please open an issue on this repository to report them.
+Below are some common usages of the SPS frontend API that have changed. Note that this list is not exhaustive, if you encounter more differences, please open an issue on this repository to report them.
 
 ### Listening for UE messages
 
