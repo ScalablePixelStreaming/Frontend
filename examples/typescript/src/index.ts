@@ -1,11 +1,15 @@
-import { Config, PixelStreaming, SPSApplication, TextParameters, PixelStreamingApplicationStyle, MessageRecv, Flags } from "@tensorworks/libspsfrontend";
+import { Config, PixelStreaming, SPSApplication, PixelStreamingApplicationStyle, Flags, BaseMessage } from "@tensorworks/libspsfrontend";
 
 // Apply default styling from Epic Games Pixel Streaming Frontend
 export const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
 PixelStreamingApplicationStyles.applyStyleSheet();
 
-// Extend the MessageRecv to allow the engine version to exist as part of our config message from the signalling server
-class MessageExtendedConfig extends MessageRecv {
+// Extend the default "Config" message supplied by PSInfra library to include the following:
+// - Engine version
+// - Platform
+// - FrontendSendOffer
+class MessageExtendedConfig implements BaseMessage {
+	type: string;
 	peerConnectionOptions: RTCConfiguration;
 	engineVersion: string;
 	platform: string;
@@ -29,10 +33,10 @@ document.body.onload = function () {
 	const stream = new ScalablePixelStreaming(config);
 
 	// Override the onConfig so we can determine if we need to send the WebRTC offer based on what is sent from the signalling server
-	stream.webSocketController.onConfig = (messageExtendedConfig: MessageExtendedConfig) => {
-		stream.config.setFlagEnabled(Flags.BrowserSendOffer, messageExtendedConfig.frontendToSendOffer);
-		stream.handleOnConfig(messageExtendedConfig);
-	}
+	stream.signallingProtocol.addListener("config", (config : MessageExtendedConfig) => {
+		stream.config.setFlagEnabled(Flags.BrowserSendOffer, config.frontendToSendOffer);
+		stream.handleOnConfig(config);
+	});
 
 	// Create and append our application
 	const spsApplication = new SPSApplication({

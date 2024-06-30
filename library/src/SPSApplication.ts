@@ -1,5 +1,5 @@
-import { Application, SettingUIFlag, UIOptions } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4';
-import { AggregatedStats, SettingFlag, TextParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
+import { Application, SettingUIFlag, UIOptions } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5';
+import { AggregatedStats, SettingFlag, TextParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { LoadingOverlay } from './LoadingOverlay';
 import { SPSSignalling } from './SignallingExtension';
 import { MessageStats } from './Messages';
@@ -19,7 +19,7 @@ export class SPSApplication extends Application {
 
 	constructor(config: UIOptions) {
 		super(config);
-		this.signallingExtension = new SPSSignalling(this.stream.webSocketController);
+		this.signallingExtension = new SPSSignalling(this.stream.signallingProtocol);
 		this.signallingExtension.onAuthenticationResponse = this.handleSignallingResponse.bind(this);
 		this.signallingExtension.onInstanceStateChanged = this.handleSignallingResponse.bind(this);
 
@@ -68,8 +68,15 @@ export class SPSApplication extends Application {
 			// get the current signalling url
 			let signallingUrl = this.stream.config.getTextSettingValue(TextParameters.SignallingServerUrl);
 
-			// build the signalling URL based on the existing window location, the result should be 'domain.com/signalling/app-name'
-			signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "signalling" + window.location.pathname : signallingUrl + "/signalling" + window.location.pathname;
+			if(signallingUrl.includes("/signalling") || signallingUrl.includes("/signalling/"))
+			{
+				return signallingUrl;
+			}
+			else
+			{
+				// build the signalling URL based on the existing window location, the result should be 'domain.com/signalling/app-name'
+				signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "signalling" + window.location.pathname : signallingUrl + "/signalling" + window.location.pathname;
+			}
 
 			return signallingUrl
 		});
@@ -89,6 +96,6 @@ export class SPSApplication extends Application {
 	 */
 	sendStatsToSignallingServer(stats: AggregatedStats) {
 		const data = new MessageStats(stats);
-		this.stream.webSocketController.webSocket.send(data.payload());
+		this.stream.signallingProtocol.sendMessage(data);
 	}
 }
