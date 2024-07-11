@@ -1,4 +1,4 @@
-import { Config, PixelStreaming, SPSApplication, PixelStreamingApplicationStyle, Flags, TextParameters, BaseMessage } from "@tensorworks/libspsfrontend";
+import { Config, PixelStreaming, SPSApplication, PixelStreamingApplicationStyle, Flags, TextParameters, BaseMessage, WebRtcDisconnectedEvent } from "@tensorworks/libspsfrontend";
 
 // Apply default styling from Epic Games Pixel Streaming Frontend
 export const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
@@ -51,6 +51,24 @@ document.body.onload = function () {
 		stream.config.setFlagEnabled(Flags.BrowserSendOffer, config.frontendToSendOffer);
 		stream.handleOnConfig(config);
 	});
+
+	// override the _onDisconnect function to intercept webrtc disconnect events
+	// and modify how the event is fired by always showing a click to reconnect overlay.
+	// we also add a full stop to the AFK message.
+	stream._onDisconnect = function (eventString: string) {
+
+		// check if the eventString coming in is the inactivity string and add a full stop
+		if (eventString == "You have been disconnected due to inactivity") {
+			eventString += "."
+		}
+
+		this._eventEmitter.dispatchEvent(
+			new WebRtcDisconnectedEvent({
+				eventString: eventString,
+				allowClickToReconnect: true
+			})
+		);
+	}
 
 	// Create and append our application
 	const spsApplication = new SPSApplication({

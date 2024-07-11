@@ -5,7 +5,7 @@ export { MessageStats } from "./Messages";
 export { MessageAuthRequest, InstanceState, MessageInstanceState, MessageAuthResponseOutcomeType, MessageAuthResponse, MessageRequestInstance, SPSSignalling } from "./SignallingExtension";
 
 // Epic Games Pixel Streaming Frontend exports
-export { WebRtcPlayerController } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+export { WebRtcPlayerController, WebRtcDisconnectedEvent } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 export { WebXRController } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 export { Config, ControlSchemeType, Flags, NumericParameters, TextParameters, OptionParameters, FlagsIds, NumericParametersIds, TextParametersIds, OptionParametersIds, AllSettings } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 export { SettingBase } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
