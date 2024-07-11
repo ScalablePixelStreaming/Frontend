@@ -1,4 +1,4 @@
-import { Config, PixelStreaming, SPSApplication, PixelStreamingApplicationStyle, Flags, BaseMessage } from "@tensorworks/libspsfrontend";
+import { Config, PixelStreaming, SPSApplication, PixelStreamingApplicationStyle, Flags, TextParameters, BaseMessage } from "@tensorworks/libspsfrontend";
 
 // Apply default styling from Epic Games Pixel Streaming Frontend
 export const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
@@ -28,6 +28,20 @@ document.body.onload = function () {
 
 	// Create a config object. We default to sending the WebRTC offer from the browser as true, TimeoutIfIdle to true, AutoConnect to false and MaxReconnectAttempts to 0
 	const config = new Config({ useUrlParams: true, initialSettings: { OfferToReceive: true, TimeoutIfIdle: true, AutoConnect: false, MaxReconnectAttempts: 0 } });
+
+	// Handle setting custom signalling url from code or by querying url parameters (e.g. ?ss=ws://my.signaling.server).
+	{
+		// Replace with your custom signalling url if you need to.
+		// Otherwise SPS will use ws|wss://window.location.host/signalling/window.location.pathname
+		let YOUR_CUSTOM_SIGNALLING_URL_HERE : string = ""; // <-- replace here
+
+		// Check the ?ss= url parameter for a custom signalling url.
+		const urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.has(TextParameters.SignallingServerUrl)) {
+			YOUR_CUSTOM_SIGNALLING_URL_HERE = urlParams.get(TextParameters.SignallingServerUrl);
+		}
+		config.setTextSetting(TextParameters.SignallingServerUrl, YOUR_CUSTOM_SIGNALLING_URL_HERE);
+	}
 
 	// Create stream and spsApplication instances that implement the Epic Games Pixel Streaming Frontend PixelStreaming and Application types
 	const stream = new ScalablePixelStreaming(config);
