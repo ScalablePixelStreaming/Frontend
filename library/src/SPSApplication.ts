@@ -1,5 +1,5 @@
-import { Application, SettingUIFlag, UIOptions } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4';
-import { AggregatedStats, SettingFlag, TextParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
+import { Application, SettingUIFlag, UIOptions } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5';
+import { AggregatedStats, SettingFlag, TextParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { LoadingOverlay } from './LoadingOverlay';
 import { SPSSignalling } from './SignallingExtension';
 import { MessageStats } from './Messages';
@@ -19,7 +19,7 @@ export class SPSApplication extends Application {
 
 	constructor(config: UIOptions) {
 		super(config);
-		this.signallingExtension = new SPSSignalling(this.stream.webSocketController);
+		this.signallingExtension = new SPSSignalling(this.stream.signallingProtocol);
 		this.signallingExtension.onAuthenticationResponse = this.handleSignallingResponse.bind(this);
 		this.signallingExtension.onInstanceStateChanged = this.handleSignallingResponse.bind(this);
 
@@ -60,18 +60,26 @@ export class SPSApplication extends Application {
 		// SPS needs to build a specific signalling server url based on the application name so K8s can distinguish it
 		this.stream.setSignallingUrlBuilder(() => {
 
-			// if we have overriden the signalling server URL with a .env file use it here
+			// If we have overriden the signalling server URL with a .env file use it here
 			if (WEBSOCKET_URL !== undefined ) {
 				return WEBSOCKET_URL as string;
 			}
 
-			// get the current signalling url
-			let signallingUrl = this.stream.config.getTextSettingValue(TextParameters.SignallingServerUrl);
+			// If there is signalling url specified, then use that.
+			let customSignallingUrl = this.stream.config.getTextSettingValue(TextParameters.SignallingServerUrl);
+			if(customSignallingUrl && customSignallingUrl !== "") {
+				return customSignallingUrl;
+			}
 
-			// build the signalling URL based on the existing window location, the result should be 'domain.com/signalling/app-name'
-			signallingUrl = signallingUrl.endsWith("/") ? signallingUrl + "signalling" + window.location.pathname : signallingUrl + "/signalling" + window.location.pathname;
+			// If neither environment used or customSignallingUrl specified, then build the URL using the domain we are on.
 
-			return signallingUrl
+			// Construct the signalling url from the base url, prepend protocol, then append /signalling, then append /rest-of-path?myargs
+			const urlProtocol: string =  window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			const urlBase: string = window.location.host;
+			const urlPath: string = window.location.pathname;
+			// Build the signalling URL based on the existing window location, the result should be 'domain.com/signalling/app-name'
+			const signallingUrl = urlProtocol + urlBase + "/signalling" + urlPath;
+			return signallingUrl;
 		});
 	}
 
@@ -89,6 +97,6 @@ export class SPSApplication extends Application {
 	 */
 	sendStatsToSignallingServer(stats: AggregatedStats) {
 		const data = new MessageStats(stats);
-		this.stream.webSocketController.webSocket.send(data.payload());
+		this.stream.signallingProtocol.sendMessage(data);
 	}
 }

@@ -1,4 +1,4 @@
-import { TextOverlay } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4';
+import { TextOverlay } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5';
 
 export class LoadingOverlay extends TextOverlay {
 
