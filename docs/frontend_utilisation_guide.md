@@ -134,12 +134,19 @@ if(webSocketAddress != ""){
 7) Create an instance of the `PixelStreaming` object called `stream` and an instance of the  `SPSApplication` object called `spsApplication`:
 
 ```typescript
+
+// Create stream and spsApplication instances that implement the Epic Games Pixel Streaming Frontend PixelStreaming and Application types
 const stream = new PixelStreaming(config);
-const spsApplication = new SPSApplication({
-	stream,
-	onColorModeChanged: (isLightMode) => 
-	PixelStreamingApplicationStyles.setColorMode(isLightMode) /* Light/Dark mode support. */
-});
+
+// Create our SPS application and pass it some UI configuration options.
+// Note: There are more options than this if you need them (e.g. turning off certain UI elements).
+const uiOptions: UIOptions = {
+    stream: stream,
+    onColorModeChanged: (isLightMode) => PixelStreamingApplicationStyles.setColorMode(isLightMode) /* Light/Dark mode support. */
+};
+
+// Create our application
+const spsApplication: SPSApplication = new SPSApplication(uiOptions);
 ```
 
 8) Append the `spsApplication.rootElement` inside a DOM element of your choice or inject directly into the body of the web page, like in the TypeScript example:
