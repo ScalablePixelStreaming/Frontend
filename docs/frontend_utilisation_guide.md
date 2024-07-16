@@ -137,7 +137,8 @@ if(webSocketAddress != ""){
 const stream = new PixelStreaming(config);
 const spsApplication = new SPSApplication({
 	stream,
-	onColorModeChanged: (isLightMode) => PixelStreamingApplicationStyles.setColorMode(isLightMode) /* Light/Dark mode support. */
+	onColorModeChanged: (isLightMode) => 
+	PixelStreamingApplicationStyles.setColorMode(isLightMode) /* Light/Dark mode support. */
 });
 ```
 
