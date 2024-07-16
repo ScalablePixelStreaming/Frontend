@@ -1,14 +1,14 @@
 import {
 	Logger,
-	MessageRecv,
-	MessageSend,
-	WebSocketController,
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
+	BaseMessage,
+	SignallingProtocol,
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 
 /**
  * Auth Request Message Wrapper
  */
-export class MessageAuthRequest extends MessageSend {
+export class MessageAuthRequest implements BaseMessage {
+	type: string;
 	token: string;
 	provider: string;
 
@@ -17,7 +17,6 @@ export class MessageAuthRequest extends MessageSend {
 	 * @param provider - Name of the provider that is registered in the auth plugin
 	 */
 	constructor(token: string, provider: string) {
-		super();
 		this.type = "authenticationRequest";
 		this.token = token;
 		this.provider = provider;
@@ -37,14 +36,14 @@ export enum InstanceState {
 /**
  * Instance State Message wrapper
  */
-export class MessageInstanceState extends MessageRecv {
+export class MessageInstanceState {
 	state: InstanceState;
 	details: string;
 	progress: number;
 }
 
 /**
- * Types of Authentication reposes 
+ * Types of Authentication responses
  */
 export enum MessageAuthResponseOutcomeType {
 	REDIRECT = "REDIRECT",
@@ -54,9 +53,9 @@ export enum MessageAuthResponseOutcomeType {
 }
 
 /**
- * Authentication Response Message wrapper
+ * Structure for auth responses
  */
-export class MessageAuthResponse extends MessageRecv {
+export class MessageAuthResponse {
 	outcome: MessageAuthResponseOutcomeType;
 	redirect: string;
 	error: string;
@@ -65,13 +64,14 @@ export class MessageAuthResponse extends MessageRecv {
 /**
  * Instance Request Message Wrapper
  */
-export class MessageRequestInstance extends MessageSend {
+export class MessageRequestInstance implements BaseMessage {
+
+	type: string;
 
 	// An opaque string representing optional configuration data to pass to the signalling server for instance customisation
-	data: string
+	data: string;
 
 	constructor() {
-		super();
 		this.type = "requestInstance";
 	}
 }
@@ -85,36 +85,33 @@ export class SPSSignalling {
 	onInstanceStateChanged: (stateChangedMsg: string, isError: boolean) => void;
 	onAuthenticationResponse: (authRespMsg: string, isError: boolean) => void;
 
-	constructor(websocketController: WebSocketController) {
-		this.extendSignallingProtocol(websocketController);
+	constructor(signallingProtocol: SignallingProtocol) {
+		this.extendSignallingProtocol(signallingProtocol);
 	}
 
 	/**
 	 * Extend the signalling protocol with SPS specific messages.
 	 */
-	extendSignallingProtocol(webSocketController: WebSocketController) {
+	extendSignallingProtocol(signallingProtocol: SignallingProtocol) {
 
 		// authenticationRequired
-		webSocketController.signallingProtocol.addMessageHandler("authenticationRequired", (authReqPayload: string) => {
+		signallingProtocol.addListener("authenticationRequired", (authReqPayload: BaseMessage) => {
 			Logger.Log(Logger.GetStackTrace(), "AUTHENTICATION_REQUIRED", 6);
 			const url_string = window.location.href;
 			const url = new URL(url_string);
 			const authRequest = new MessageAuthRequest(url.searchParams.get("code"), url.searchParams.get("provider"));
-			webSocketController.webSocket.send(authRequest.payload());
+			signallingProtocol.sendMessage(authRequest);
 		});
 
 		// instanceState
-		webSocketController.signallingProtocol.addMessageHandler("instanceState", (instanceStatePayload: string) => {
+		signallingProtocol.addListener("instanceState", (instanceState: MessageInstanceState) => {
 			Logger.Log(Logger.GetStackTrace(), "INSTANCE_STATE", 6);
-			const instanceState: MessageInstanceState = JSON.parse(instanceStatePayload);
 			this.handleInstanceStateChanged(instanceState);
 		});
 
 		// authenticationResponse
-		webSocketController.signallingProtocol.addMessageHandler("authenticationResponse", (authRespPayload: string) => {
+		signallingProtocol.addListener("authenticationResponse", (authenticationResponse: MessageAuthResponse) => {
 			Logger.Log(Logger.GetStackTrace(), "AUTHENTICATION_RESPONSE", 6);
-
-			const authenticationResponse: MessageAuthResponse = JSON.parse(authRespPayload);
 
 			this.handleAuthenticationResponse(authenticationResponse);
 
@@ -125,8 +122,7 @@ export class SPSSignalling {
 				}
 				case MessageAuthResponseOutcomeType.AUTHENTICATED: {
 					Logger.Log(Logger.GetStackTrace(), "User is authenticated and now requesting an instance", 6);
-
-					webSocketController.webSocket.send(new MessageRequestInstance().payload());
+					signallingProtocol.sendMessage(new MessageRequestInstance());
 					break;
 				}
 				case MessageAuthResponseOutcomeType.INVALID_TOKEN: {
@@ -148,7 +144,7 @@ export class SPSSignalling {
 
 	/**
 	* Set up functionality to happen when an instance state change occurs and updates the info overlay with the response
-	* @param instanceState - the message instance state 
+	* @param instanceState - the message instance state
 	*/
 	handleInstanceStateChanged(instanceState: MessageInstanceState) {
 		let instanceStateMessage = "";
