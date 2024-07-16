@@ -6,10 +6,6 @@ The Scalable Pixel Streaming (SPS) frontend is a library of HTML, CSS, and TypeS
 
 ## Epic Games Pixel Streaming frontend and UI frontend NPM packages
 
-NPM packages consumed by the SPS frontend are:
-
-- [Pixel Streaming Frontend UI](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4)
-
 ### Pixel Streaming frontend
 
 The NPM package for the Pixel Streaming frontend consumed by SPS is located [here](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.4).
