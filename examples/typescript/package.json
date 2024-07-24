@@ -1,6 +1,6 @@
 {
   "name": "@tensorworks/spstypescriptexample",
-  "version": "v1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "The typescript example for consuming the Scalable Pixel Streaming Frontend",
   "main": "./src/index.ts",
   "scripts": {

@@ -36,7 +36,7 @@ document.body.onload = function () {
 	{
 		// Replace with your custom signalling url if you need to.
 		// Otherwise SPS will use ws|wss://window.location.host/signalling/window.location.pathname
-		let YOUR_CUSTOM_SIGNALLING_URL_HERE : string = ""; // <-- replace here
+		let YOUR_CUSTOM_SIGNALLING_URL_HERE: string = ""; // <-- replace here
 
 		// Check the ?ss= url parameter for a custom signalling url.
 		const urlParams = new URLSearchParams(window.location.search);
@@ -51,8 +51,8 @@ document.body.onload = function () {
 
 	// Override the onConfig so we can determine if we need to send the WebRTC offer based on what is sent from the signalling server
 	stream.signallingProtocol.removeAllListeners("config");
-	stream.signallingProtocol.addListener("config", (config : MessageExtendedConfig) => {
-		if(config.frontendToSendOffer) {
+	stream.signallingProtocol.addListener("config", (config: MessageExtendedConfig) => {
+		if (config.frontendToSendOffer) {
 			stream.config.setFlagEnabled(Flags.BrowserSendOffer, config.frontendToSendOffer);
 		}
 		stream.handleOnConfig(config);
