@@ -21,7 +21,8 @@ The Pixel Streaming Frontend contains all the base functionality:
 The Pixel Streaming Frontend UI contains all the functionality for UI components:
 - Text, Action and AFK Overlays.
 - CSS styling.
-- UI display settings; UE stream data.
+- UI display settings.
+- UE stream data.
 
 ---
 
