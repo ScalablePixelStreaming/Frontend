@@ -1,33 +1,27 @@
 # Utilising the frontend
 
 ## Overview 
+The Scalable Pixel Streaming Frontend is a library of HTML, CSS and TypeScript code that runs in client web browsers to help users connect to Scalable Pixel Streaming applications and interact with them. It is able to achieve this by consuming the Pixel Streaming Frontend and UI libraries and by extending their signalling server and WebSocket packages the Pixel Streaming Frontend can be configured to work with Scalable Pixel Streaming signalling severs.
 
-The Scalable Pixel Streaming (SPS) frontend is a library of HTML, CSS, and TypeScript code that runs in web browsers and allows users to connect and interact with Scalable Pixel Streaming applications. It consumes the Epic Games Pixel Streaming frontend and UI libraries and extends their signalling server and WebSocket packages. Note that the Epic Games Pixel Streaming frontend can be configured to work with Scalable Pixel Streaming signalling servers.
+## Epic Games Pixel Streaming Frontend and UI Frontend
+For the base functionality for Pixel Streaming and its UI capabilities the Scalable Pixel Streaming Frontend consumes the Epic Games Pixel Streaming Frontend and UI Frontend:
+- [Pixel Streaming Frontend](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.5)
+- [Pixel Streaming Frontend UI](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5)
 
-## Epic Games Pixel Streaming frontend and UI frontend NPM packages
-
-### Pixel Streaming frontend
-
-The NPM package for the Pixel Streaming frontend consumed by SPS is located [here](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.4).
-
-It contains the following functionality:
-
-- WebSocket handling;
-- Data channel handling;
-- UE message handling;
-- Mouse and keyboard interaction handling;
-- Video and audio stream handling;
+### Pixel Streaming Frontend 
+The Pixel Streaming Frontend contains all the base functionality:
+- WebSocket handling.
+- Data channel handling.
+- UE message handling.
+- Mouse and keyboard interaction handling.
+- Video and audio stream handling.
 - Logic for: AFK, FreezeFrames, Mic, TURN, SDP.
 
-### Pixel Streaming frontend UI
-
-The NPM package for the Pixel Streaming UI frontend consumed by SPS is located [here](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4).
-
-It contains the following functionality:
-
-- Text, Action, and AFK Overlays;
-- CSS styling;
-- UI display settings;
+### Pixel Streaming Frontend UI
+The Pixel Streaming Frontend UI contains all the functionality for UI components:
+- Text, Action and AFK Overlays.
+- CSS styling.
+- UI display settings.
 - UE stream data.
 
 ---
@@ -233,6 +227,12 @@ if(webSocketAddress != ""){
 }
 ```
 
-## SPS frontend and frontend UI customisation
+## SPS Frontend UI element customisation
+Further customisation of UI elements like overlays or visual elements can also be achieved by utilising the Pixel Streaming Frontend UI and extending its types. For further information on how to utilise the Epic Games Pixel Streaming Frontend UI refer to the [Pixel Streaming Frontend UI documentation](https://github.com/EpicGames/PixelStreamingInfrastructure#readme).
 
-Refer to [the official Pixel Streaming repository documentation](https://github.com/EpicGamesExt/PixelStreamingInfrastructure#readme) to learn more about further utilising the Epic Games Pixel Streaming frontend and frontend UI. Utilise the supplied SPS frontend library as a template for further customisation, and leverage Pixel Streaming frontend UI types to further customise UI elements, such as overlays and visual elements.
+## Building a frontend container
+This may be useful if you need to make modifications to the default SPS frontend and want to deploy it in your SPS installation.
+
+1. Build the `examples/typescript` frontend using the instructions above.
+2. Navigate to the root of this repository.
+3. `docker build -t yourdockerhubaccount/my-custom-sps-frontend:latest -f dockerfiles/sps-frontend.dockerfile .`

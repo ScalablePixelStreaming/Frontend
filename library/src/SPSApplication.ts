@@ -1,5 +1,5 @@
 import { Application, SettingUIFlag, UIOptions } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5';
-import { AggregatedStats, SettingFlag, TextParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { AggregatedStats, StatsReceivedEvent, SettingFlag, TextParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { LoadingOverlay } from './LoadingOverlay';
 import { SPSSignalling } from './SignallingExtension';
 import { MessageStats } from './Messages';
@@ -12,6 +12,7 @@ declare var WEBSOCKET_URL: string;
 export class SPSApplication extends Application {
 	private loadingOverlay: LoadingOverlay;
 	private signallingExtension: SPSSignalling;
+	private sendStatsToServerSetting: SettingFlag<string>;
 
 	static Flags = class {
 		static sendToServer = "sendStatsToServer"
@@ -27,7 +28,7 @@ export class SPSApplication extends Application {
 
 		// Add 'Send Stats to Server' checkbox
 		const spsSettingsSection = this.configUI.buildSectionWithHeading(this.settingsPanel.settingsContentElement, "Scalable Pixel Streaming");
-		const sendStatsToServerSetting = new SettingFlag(
+		this.sendStatsToServerSetting = new SettingFlag(
 			SPSApplication.Flags.sendToServer,
 			"Send stats to server",
 			"Send session stats to the server",
@@ -35,17 +36,18 @@ export class SPSApplication extends Application {
 			this.stream.config.useUrlParams
 		);
 
-		spsSettingsSection.appendChild(new SettingUIFlag(sendStatsToServerSetting).rootElement);
+		spsSettingsSection.appendChild(new SettingUIFlag(this.sendStatsToServerSetting).rootElement);
 		this.loadingOverlay = new LoadingOverlay(this.stream.videoElementParent);
 
-		this.stream.addEventListener(
-			'statsReceived',
-			({ data: { aggregatedStats } }) => {
-				if (sendStatsToServerSetting.flag) {
-					this.sendStatsToSignallingServer(aggregatedStats);
-				}
+		this.stream.addEventListener('statsReceived', (statsReceived: StatsReceivedEvent) => { this.handleStatsReceived(statsReceived); });
+	}
+
+	handleStatsReceived(statsReceivedEvent: StatsReceivedEvent) {
+		if(statsReceivedEvent && statsReceivedEvent.data && statsReceivedEvent.data.aggregatedStats) {
+			if (this.sendStatsToServerSetting.flag) {
+				this.sendStatsToSignallingServer(statsReceivedEvent.data.aggregatedStats);
 			}
-		);
+		}
 	}
 
 	handleSignallingResponse(signallingResp: string, isError: boolean) {
