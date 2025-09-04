@@ -6,8 +6,8 @@ import {
 	InboundAudioStats,
 	InboundVideoStats,
 	BaseMessage,
-	OutBoundVideoStats
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+	OutboundRTPStats
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.6';
 
 /**
  * Aggregated Stats Message Wrapper
@@ -20,7 +20,7 @@ export class MessageStats implements BaseMessage {
 	dataChannelStats: DataChannelStats;
 	localCandidates: Array<CandidateStat>;
 	remoteCandidates: Array<CandidateStat>;
-	outboundVideoStats: OutBoundVideoStats;
+	outboundVideoStats: OutboundRTPStats;
 
 	/**
 	 * @param aggregatedStats - Aggregated Stats
@@ -30,9 +30,9 @@ export class MessageStats implements BaseMessage {
 		this.inboundVideoStats = aggregatedStats.inboundVideoStats;
 		this.inboundAudioStats = aggregatedStats.inboundAudioStats;
 		this.candidatePair = aggregatedStats.getActiveCandidatePair();
-		this.dataChannelStats = aggregatedStats.DataChannelStats
+		this.dataChannelStats = aggregatedStats.datachannelStats;
 		this.localCandidates = aggregatedStats.localCandidates;
 		this.remoteCandidates = aggregatedStats.remoteCandidates;
-		this.outboundVideoStats = aggregatedStats.outBoundVideoStats;
+		this.outboundVideoStats = aggregatedStats.outboundVideoStats;
 	}
 }
