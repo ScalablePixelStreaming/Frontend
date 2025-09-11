@@ -62,10 +62,10 @@ export class LoadingOverlay extends TextOverlay {
 	}
 
 	/**
-	 * Update the text overlays inner text 
-	 * @param text the update text to be inserted into the overlay 
+	 * Overridden version of `update` that adds our custom spinner.
+	 * @param text the update text to be inserted into the overlay.
 	 */
-	public update(text: string): void {
+	public override update(text: string): void {
 		if (text != null || text != undefined) {
 			this.textElement.innerHTML = "";
 

@@ -1,19 +1,29 @@
 {
-  "compilerOptions": {
-    "outDir": "./types",
-    "noImplicitAny": true,
-    "module": "es6",
-    "esModuleInterop": true,
-    "target": "ES6",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "allowJs": true,
-    "declaration": true
-  },
-  "lib": [
-    "es2015"
-  ],
-  "include": [
-    "./src/*.ts"
-  ],
+    "compilerOptions": {
+        "outDir": "./dist",
+        "noImplicitAny": true,
+        "esModuleInterop": true,
+        "target": "ES6",
+        "sourceMap": true,
+        "allowJs": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitOverride": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "declaration": true,
+        "declarationDir": "./dist/types",
+        "moduleResolution": "bundler" // helps IDEs
+    },
+    "lib": ["ES6"],
+    "include": ["./src/**/*.ts"],
+    "exclude": ["./src/**/*.test.ts"],
+    "typedocOptions": {
+        "exclude": "src/index.*",
+        "entryPoints": ["src/index.ts"],
+        "sort": ["enum-value-ascending", "required-first", "source-order"],
+        "out": "docs",
+        "theme": "default",
+        "hideGenerator": "true"
+    }
 }
