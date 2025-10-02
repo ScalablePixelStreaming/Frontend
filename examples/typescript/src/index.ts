@@ -30,7 +30,7 @@ document.body.onload = function () {
 	// Logger.SetLoggerVerbosity(10);
 
 	// Create a config object. We default to sending the WebRTC offer from the browser as false, TimeoutIfIdle to true, AutoConnect to false and MaxReconnectAttempts to 0
-	const config = new Config({ useUrlParams: true, initialSettings: { OfferToReceive: false, TimeoutIfIdle: true, AutoConnect: false, MaxReconnectAttempts: 0 } });
+	const config = new Config({ useUrlParams: true, initialSettings: { BrowserSendOffer: false, TimeoutIfIdle: true, AutoConnect: false, MaxReconnectAttempts: 0 } });
 
 	// Handle setting custom signalling url from code or by querying url parameters (e.g. ?ss=ws://my.signaling.server).
 	{

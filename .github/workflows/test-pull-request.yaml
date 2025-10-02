@@ -31,7 +31,7 @@ jobs:
         working-directory: ./library
         run: |
           npm ci
-          npm run build-dev
+          npm run build
 
       # install deps for Library and build for production
       - name: Install and build library for production
@@ -45,7 +45,7 @@ jobs:
         working-directory: ./examples/typescript
         run: |
           npm ci
-          npm run build-all-dev
+          npm run build-all
       
       # install deps for Frontend and Library for and build both for production
       - name: Install and build library and Frontend for production

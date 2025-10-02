@@ -1,5 +1,5 @@
-import { Application, SettingUIFlag, UIOptions } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5';
-import { AggregatedStats, StatsReceivedEvent, SettingFlag, TextParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { Application, SettingUIFlag, UIOptions } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.6';
+import { AggregatedStats, StatsReceivedEvent, SettingFlag, TextParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.6';
 import { LoadingOverlay } from './LoadingOverlay';
 import { SPSSignalling } from './SignallingExtension';
 import { MessageStats } from './Messages';

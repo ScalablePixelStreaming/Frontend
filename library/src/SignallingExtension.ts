@@ -2,7 +2,7 @@ import {
 	Logger,
 	BaseMessage,
 	SignallingProtocol,
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.6';
 
 /**
  * Auth Request Message Wrapper
@@ -96,7 +96,7 @@ export class SPSSignalling {
 
 		// authenticationRequired
 		signallingProtocol.addListener("authenticationRequired", (authReqPayload: BaseMessage) => {
-			Logger.Log(Logger.GetStackTrace(), "AUTHENTICATION_REQUIRED", 6);
+			Logger.Info("AUTHENTICATION_REQUIRED");
 			const url_string = window.location.href;
 			const url = new URL(url_string);
 			const authRequest = new MessageAuthRequest(url.searchParams.get("code"), url.searchParams.get("provider"));
@@ -105,13 +105,13 @@ export class SPSSignalling {
 
 		// instanceState
 		signallingProtocol.addListener("instanceState", (instanceState: MessageInstanceState) => {
-			Logger.Log(Logger.GetStackTrace(), "INSTANCE_STATE", 6);
+			Logger.Info("INSTANCE_STATE");
 			this.handleInstanceStateChanged(instanceState);
 		});
 
 		// authenticationResponse
 		signallingProtocol.addListener("authenticationResponse", (authenticationResponse: MessageAuthResponse) => {
-			Logger.Log(Logger.GetStackTrace(), "AUTHENTICATION_RESPONSE", 6);
+			Logger.Info("AUTHENTICATION_RESPONSE");
 
 			this.handleAuthenticationResponse(authenticationResponse);
 
@@ -121,20 +121,20 @@ export class SPSSignalling {
 					break;
 				}
 				case MessageAuthResponseOutcomeType.AUTHENTICATED: {
-					Logger.Log(Logger.GetStackTrace(), "User is authenticated and now requesting an instance", 6);
+					Logger.Info("User is authenticated and now requesting an instance");
 					signallingProtocol.sendMessage(new MessageRequestInstance());
 					break;
 				}
 				case MessageAuthResponseOutcomeType.INVALID_TOKEN: {
-					Logger.Info(Logger.GetStackTrace(), "Authentication error : Invalid Token");
+					Logger.Info("Authentication error : Invalid Token");
 					break;
 				}
 				case MessageAuthResponseOutcomeType.ERROR: {
-					Logger.Info(Logger.GetStackTrace(), "Authentication Error from server Check what you are sending");
+					Logger.Info("Authentication Error from server Check what you are sending");
 					break;
 				}
 				default: {
-					Logger.Error(Logger.GetStackTrace(), "The Outcome Message has not been handled : this is really bad");
+					Logger.Error("The Outcome Message has not been handled : this is an unexpected code path");
 					break;
 				}
 			}
